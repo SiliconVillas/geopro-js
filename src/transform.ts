@@ -93,6 +93,39 @@ export class Transform {
       ]
     );
   }
+  static fromRotationY(a: number) {
+    const cosa = round4(Math.cos(a));
+    const sina = round4(Math.sin(a));
+    return Transform.fromMatrices(
+      [ [ cosa, 0.0, -sina, 0.0 ]
+      , [ 0.0, 1.0, 0.0, 0.0 ]
+      , [ sina, 0.0, cosa, 0.0 ]
+      , [ 0.0, 0.0, 0.0, 1.0 ]
+      ],
+      [ [ cosa, 0.0, sina, 0.0 ]
+      , [ 0.0, 1.0, 0.0, 0.0 ]
+      , [ -sina, 0.0, cosa, 0.0 ]
+      , [ 0.0, 0.0, 0.0, 1.0 ]
+      ],
+    );
+  }
+  static fromRotationZ(a: number) {
+    const cosa = round4(Math.cos(a));
+    const sina = round4(Math.sin(a));
+    return Transform.fromMatrices(
+      [ [ cosa, -sina, 0.0, 0.0 ]
+      , [ sina, cosa, 0.0, 0.0 ]
+      , [ 0.0, 0.0, 1.0, 0.0 ]
+      , [ 0.0, 0.0, 0.0, 1.0 ]
+      ],
+      [ [ cosa, 0.0, sina, 0.0 ]
+      , [ 0.0, 1.0, 0.0, 0.0 ]
+      , [ -sina, 0.0, cosa, 0.0 ]
+      , [ 0.0, 0.0, 0.0, 1.0 ]
+      ],
+    );
+  }
+
 
   static fromScale(tx: number, ty: number, tz: number) {
     return Transform.fromMatrices(
