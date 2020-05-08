@@ -7,7 +7,7 @@ describe('Rotations',() => {
     const scale = map(Transform.fromScale(2.0, 2.0, 2.0));
     const p2 = scale(p1);
     const testP2 = new Point(2.0, 4.0, 8.0);
-    expect(p2).toEqual(testP2);
+    expect(Point.equals(p2,testP2)).toBe(true);
  });
 
  test('The inverse scale transform divides the point coordinates', () => {
@@ -15,7 +15,7 @@ describe('Rotations',() => {
     const scale = map(Transform.fromScale(2.0, 2.0, 2.0).inverse());
     const p2 = scale(p1);
     const testP2 = new Point(0.5, 1.0, 2.0);
-    expect(p2).toEqual(testP2);
-  });
+    expect(Point.equals(p2,testP2)).toBe(true);
+ });
 
 });

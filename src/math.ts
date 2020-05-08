@@ -1,6 +1,8 @@
 import { curry } from "ramda";
 import { Matrix } from "./types";
 
+export const precision = 0.00001;
+
 const round = curry((p: number, n: number) => {
   const m = Math.pow(10,p);
   return Math.round(n * m)/m;

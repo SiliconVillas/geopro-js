@@ -9,7 +9,7 @@ describe('Compose',() => {
     const translate = compose(trans2,trans1);
     const p2 = map(translate,p1);
     const expP2 = new Point(0.0, 1.0, 1.0);
-    expect(p2).toEqual(expP2);
+    expect(Point.equals(p2,expP2)).toBe(true);
   });
 
   test('Composing translations and invert brings the correct result', () => {
@@ -19,7 +19,7 @@ describe('Compose',() => {
     const translate = compose(trans2,trans1).inverse();
     const p2 = map(translate,p1);
     const expP2 = new Point(0.0, 0.0, 0.0);
-    expect(p2).toEqual(expP2);
+    expect(Point.equals(p2,expP2)).toBe(true);
   });
 
   test('Composing rotations brings the correct result', () => {
@@ -28,7 +28,7 @@ describe('Compose',() => {
     const rotX = compose(Transform.fromRotationX(ang), Transform.fromRotationX(ang));
     const p2 = map(rotX,p1);
     const p2RotX = new Point(0.0, -1.0, 0.0);
-    expect(p2).toEqual(p2RotX);
+    expect(Point.equals(p2, p2RotX)).toBe(true);
   });
 
   test('Composing rotations and invert brings the correct result', () => {
@@ -37,7 +37,7 @@ describe('Compose',() => {
     const rotX = compose(Transform.fromRotationX(ang), Transform.fromRotationX(ang)).inverse();
     const p2 = map(rotX,p1);
     const p2RotX = new Point(0.0, 1.0, 0.0);
-    expect(p2).toEqual(p2RotX);
+    expect(Point.equals(p2, p2RotX)).toBe(true);
   });
 
   test('Composing translation and rotation brings the correct result', () => {
@@ -48,7 +48,7 @@ describe('Compose',() => {
     const transRotation = compose(rotX, trnZ);
     const p2a = map(transRotation,p1);
     const p2b = map(rotX, map(trnZ, p1));
-    expect(p2a).toEqual(p2b);
+    expect(Point.equals(p2a, p2b)).toBe(true);
   });
 
 });
