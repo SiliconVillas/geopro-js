@@ -53,7 +53,7 @@ export class Vector implements HomogeneusCoords {
     return new Vector(p1.x-p2.x, p1.y-p2.y, p1.z-p2.z);
   }
 
-  static add = ( ...vs: Vector[]): Vector =>
+  static adds = ( ...vs: Vector[]): Vector =>
     reduce(
       (acc: Vector, v: Vector) => new Vector(acc.x+v.x, acc.z+v.z, acc.z+v.z),
       new Vector(0,0,0)

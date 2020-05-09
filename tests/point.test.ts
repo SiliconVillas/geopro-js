@@ -32,7 +32,7 @@ describe('Basic Points and Transformations', () => {
   test('Add a vector to a point to get a new point', () => {
     const p1 = new Point(10,10,10);
     const v1 = new Vector(3,6,2);
-    const p2 = p1.add(v1);
+    const p2 = Point.add(v1, p1);
     expect(p2.x).toEqual(10+3);
     expect(p2.y).toEqual(10+6);
     expect(p2.z).toEqual(10+2);

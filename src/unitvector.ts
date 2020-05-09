@@ -33,6 +33,15 @@ export class UnitVector implements HomogeneusCoords  {
 
   get length () { return 1; }
 
+  multiplyBy(s: number): Vector {
+    return Vector.fromCoordinates([
+      this._coord[0]*s,
+      this._coord[1]*s,
+      this._coord[2]*s,
+      1
+    ]);
+  }
+
   static fromCoordinates = (vals: number[]): UnitVector => {
     return UnitVector.fromVector(Vector.fromCoordinates(vals));
   }
@@ -62,7 +71,7 @@ export class UnitVector implements HomogeneusCoords  {
   static crossProduct = (v1: UnitVector, v2: UnitVector) => {
     return UnitVector.fromComponents(
       v1.y*v2.z - v1.z*v2.y,
-      v2.z*v2.x - v1.x*v2.z,
+      - (v1.x*v2.z - v1.z*v2.x),
       v1.x*v2.y - v1.y*v2.x,
     );
   }

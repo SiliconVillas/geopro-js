@@ -55,7 +55,7 @@ describe('Basic Vector', () => {
     const v2 = new Vector(-10,0,0);
     const v3 = new Vector(0,-10,0);
     const v4 = new Vector(0,0,-10);
-    const vres = Vector.add(v1,v2,v3,v4)
+    const vres = Vector.adds(v1,v2,v3,v4)
     expect(vres.x).toBe(0);
     expect(vres.y).toBe(0);
     expect(vres.z).toBe(0);

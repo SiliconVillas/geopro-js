@@ -1,11 +1,11 @@
-import { clone, curry, reduce, cond } from 'ramda';
-import { Point, isPoint } from "./point";
-import { Matrix, Row, Col, HomogeneusCoords } from './types';
+import { clone } from 'ramda';
+import { Point } from "./point";
+import { Matrix, Row, Col, GeoMapper } from './types';
 import { matrixMultiply, matrixVectorMultiply } from './math';
-import { Vector, isVector } from './vector';
-import { UnitVector, isUnitVector } from './unitvector';
+import { Vector } from './vector';
+import { UnitVector } from './unitvector';
 
-export class Transform {
+export class Transform implements GeoMapper {
   private _direct: Matrix;
   private _inverse: Matrix;
 
@@ -152,25 +152,3 @@ export class Transform {
   }
 }
 
-
-/**
- * Apply the transformation to a point.
- * p' = M*p
- */
-export const map = curry(<T extends HomogeneusCoords>(t: Transform, o: T) =>
-  cond([
-    [ isPoint, t.mapPoint ],
-    [ isVector, t.mapVector ],
-    [ isUnitVector, t.mapUnitVector ]
-  ])(o)
-);
-
-/**
- * Compose transformation right to left (eg T2*T1)
- * @param tlist a list of transformation to combine
- */
-export const compose = ( ...tlist: Transform[]) =>
-  reduce(
-    (accTrans: Transform, trans: Transform ) => accTrans.composeWith(trans),
-    new Transform(),
-  )(tlist);

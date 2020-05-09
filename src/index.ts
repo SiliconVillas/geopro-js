@@ -1,4 +1,6 @@
 export { Point } from './point';
 export { Vector } from './vector';
-
-export * from './transform';
+export { UnitVector } from './unitvector';
+export { Frame } from './frame';
+export { Transform } from './transform';
+export * from './operations';
