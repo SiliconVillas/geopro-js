@@ -1,21 +1,22 @@
-import { VCoords } from "./types";
+import { VCoords, HomogeneusCoords, HCoords } from "./types";
 import { precision } from "./math";
 import { Point } from "./point";
-import { reduce } from "ramda";
+import { reduce, isNil } from "ramda";
 import { UnitVector } from "./unitvector";
 
-export class Vector {
+export class Vector implements HomogeneusCoords {
   private _coord: VCoords;
 
   constructor(x:number, y:number, z: number) {
     this._coord = [x, y, z, 0.0];
   }
 
+  get isVector() { return true; }
   get x() { return this._coord[0]; }
   get y() { return this._coord[1]; }
   get z() { return this._coord[2]; }
 
-  get coordinates() { return [...this._coord]; }
+  get coordinates(): HCoords { return [...this._coord] as HCoords; }
 
   get length () {
     const x = this._coord[0];
@@ -26,6 +27,10 @@ export class Vector {
 
   multiplyBy = (s: number) => {
     return new Vector(this._coord[0]*s, this._coord[1]*s, this._coord[2]*s );
+  }
+
+  static fromCoordinates = (vals: number[]): Vector => {
+    return new Vector(vals[0],vals[1],vals[2]);
   }
 
   static equals = (v1: Vector, v2: Vector): boolean => {
@@ -67,3 +72,6 @@ export class Vector {
   }
 }
 
+export function isVector( o: HomogeneusCoords): o is Vector {
+  return !isNil((o as Vector).isVector )
+}

@@ -1,4 +1,4 @@
-import { Vector, Point } from '../src/index';
+import { Vector, Point, map, Transform } from '../src/index';
 
 describe('Basic Vector', () => {
 
@@ -73,4 +73,56 @@ describe('Basic Vector', () => {
     expect(Vector.parallel(v1, v2)).toBe(false);
   });
 
-})
+  test('Check cross product between 2 vectors',() => {
+    const v1 = new Vector(1,0,0);
+    const v2 = new Vector(0,1,0);
+    const v3 = Vector.crossProduct(v1, v2);
+    const expV3 = new Vector(0,0,1);
+    expect(Vector.equals(v3, expV3)).toBe(true);
+  });
+
+  test('Check dot product between 2 vectors',() => {
+    const v1 = new Vector(1,0,0);
+    const v2 = new Vector(0,1,0);
+    const v3 = new Vector(0,0,1);
+    const res1 = Vector.dotProduct(v1, v2);
+    const res2 = Vector.dotProduct(v1, v3);
+    const res3 = Vector.dotProduct(v2, v3);
+    expect(res1).toBe(0.0);
+    expect(res2).toBe(0.0);
+    expect(res3).toBe(0.0);
+  });
+
+});
+
+
+describe('Vector transformations', () => {
+
+  test('Translating a Vector has no effect', () => {
+    const translate = map(Transform.fromTranslation(2.0, 2.0, 2.0));
+    const v1 = new Vector(12, 17, 22);
+    const v2 = translate(v1);
+    expect(Vector.equals(v1, v2)).toBe(true);
+  });
+
+  test('Rotation around X of -90 degrees maps a vector Z to another vector on Y (clockwise)', () => {
+    const ang = - Math.PI / 2;
+    const v1 = new Vector(0.0, 0.0, 1.0);
+    const rotX = map(Transform.fromRotationX(ang));
+    const v2 = rotX(v1);
+    const v2RotX = new Vector(0.0, 1.0, 0.0);
+    expect(Vector.equals(v2, v2RotX)).toBe(true);
+  });
+
+  test('Rotation around X of 90 degrees maps a vector Z to another vector on -Y (anticlockwise)', () => {
+    const ang = Math.PI / 2;
+    const v1 = new Vector(0.0, 0.0, 1.0);
+    const rotX = map(Transform.fromRotationX(ang));
+    const v2 = rotX(v1);
+    const p2RotX = new Vector(0.0, -1.0, 0.0);
+    expect(Vector.equals(v2, p2RotX)).toBe(true);
+  });
+
+
+});
+

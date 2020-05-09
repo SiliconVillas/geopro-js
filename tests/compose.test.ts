@@ -16,7 +16,7 @@ describe('Compose',() => {
     const p1 = new Point(0.0, 1.0, 1.0);
     const trans1 = Transform.fromTranslation(0.0, 0.0, 1.0);
     const trans2 = Transform.fromTranslation(0.0, 1.0, 0.0);
-    const translate = compose(trans2,trans1).inverse();
+    const translate = compose(trans2,trans1).inverte();
     const p2 = map(translate,p1);
     const expP2 = new Point(0.0, 0.0, 0.0);
     expect(Point.equals(p2,expP2)).toBe(true);
@@ -34,7 +34,7 @@ describe('Compose',() => {
   test('Composing rotations and invert brings the correct result', () => {
     const ang = Math.PI / 4;
     const p1 = new Point(0.0, 0.0, 1.0);
-    const rotX = compose(Transform.fromRotationX(ang), Transform.fromRotationX(ang)).inverse();
+    const rotX = compose(Transform.fromRotationX(ang), Transform.fromRotationX(ang)).inverte();
     const p2 = map(rotX,p1);
     const p2RotX = new Point(0.0, 1.0, 0.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);

@@ -10,3 +10,9 @@ export type Col = 0 | 1 | 2 | 3;
 export type VCoords = [ number, number, number, 0.0 ];
 export type PCoords = [ number, number, number, 1.0 ];
 
+export interface HomogeneusCoords {
+  coordinates: HCoords;
+  x: number;
+  y: number;
+  z: number;
+}

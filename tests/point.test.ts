@@ -59,7 +59,7 @@ describe('Basic Points and Transformations', () => {
   test('Inverting Identity keeps point position', () => {
     const p = new Point(1.0, 3.4, 5.6);
     const t = new Transform();
-    const p1 = map(t.inverse(),p);
+    const p1 = map(t.inverte(),p);
     expect(p1.x).toEqual(p.x);
     expect(p1.y).toEqual(p.y);
     expect(p1.z).toEqual(p.z);

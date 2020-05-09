@@ -1,16 +1,11 @@
-import { VCoords } from "./types";
+import { VCoords, HCoords, HomogeneusCoords } from "./types";
 import { Vector } from "./vector";
 import { precision } from "./math";
+import { isNil } from "ramda";
 
 
-export class UnitVector {
+export class UnitVector implements HomogeneusCoords  {
   private _coord: VCoords;
-
-  private static fromCoords(c: VCoords) {
-    const uv = new UnitVector();
-    uv._coord = c;
-    return uv;
-  }
 
   static fromVector(v: Vector) {
     const uv = new UnitVector();
@@ -23,13 +18,24 @@ export class UnitVector {
     this._coord = [ 1.0, 0.0, 0.0, 0 ];
   }
 
+  private static fromComponents(x: number, y: number, z: number): UnitVector {
+    const uv = new UnitVector();
+    uv._coord = [ x, y, z, 0];
+    return uv;
+  }
+
+  get isUnitVector() { return true; }
   get x() { return this._coord[0]; }
   get y() { return this._coord[1]; }
   get z() { return this._coord[2]; }
 
-  get coordinates() { return [...this._coord]; }
+  get coordinates(): HCoords { return [...this._coord] as HCoords; }
 
   get length () { return 1; }
+
+  static fromCoordinates = (vals: number[]): UnitVector => {
+    return UnitVector.fromVector(Vector.fromCoordinates(vals));
+  }
 
   static equals = (v1: UnitVector, v2: UnitVector): boolean => {
     return Math.abs(v1.x - v2.x) < precision
@@ -43,6 +49,10 @@ export class UnitVector {
         || Math.abs(v1.z - v2.z) >= precision;
   }
 
+  /**
+   * Returns true if the two unit vector are parallel
+   * Same or opposite direction
+   */
   static parallel = (v1: UnitVector, v2: UnitVector): boolean => {
     return Math.abs(v1.x) - Math.abs(v2.x) < precision
         && Math.abs(v1.y) - Math.abs(v2.y) < precision
@@ -50,12 +60,11 @@ export class UnitVector {
   }
 
   static crossProduct = (v1: UnitVector, v2: UnitVector) => {
-    return UnitVector.fromCoords([
+    return UnitVector.fromComponents(
       v1.y*v2.z - v1.z*v2.y,
       v2.z*v2.x - v1.x*v2.z,
       v1.x*v2.y - v1.y*v2.x,
-      0.0
-    ]);
+    );
   }
 
   static dotProduct = (v1: UnitVector, v2: UnitVector) => {
@@ -66,4 +75,8 @@ export class UnitVector {
     return Math.acos(v1.x*v2.x+v1.y*v2.y+v1.z*v2.z);
   }
 
+}
+
+export function isUnitVector( o: HomogeneusCoords): o is UnitVector {
+  return !isNil((o as UnitVector).isUnitVector )
 }

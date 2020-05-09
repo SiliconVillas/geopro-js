@@ -1,5 +1,5 @@
 import { UnitVector } from "../src/unitvector";
-import { Vector } from "../src";
+import { Vector, map, Transform } from "../src";
 
 describe('Basic UnitVector', () => {
 
@@ -35,4 +35,60 @@ describe('Basic UnitVector', () => {
     expect(UnitVector.equals(v1,v2)).toBe(false);
     expect(UnitVector.notEquals(v1,v2)).toBe(true);
   });
+
+  test('Check cross product between 2 vectors',() => {
+    const v1 = UnitVector.fromVector(new Vector(1,0,0));
+    const v2 = UnitVector.fromVector(new Vector(0,1,0));
+    const v3 = UnitVector.crossProduct(v1, v2);
+    const expV3 = UnitVector.fromVector(new Vector(0,0,1));
+    expect(UnitVector.equals(v3, expV3)).toBe(true);
+  });
+
+  test('Check dot product between 2 vectors',() => {
+    const v1 = UnitVector.fromVector(new Vector(1,0,0));
+    const v2 = UnitVector.fromVector(new Vector(0,1,0));
+    const v3 = UnitVector.fromVector(new Vector(0,0,1));
+    const res1 = UnitVector.dotProduct(v1, v2);
+    const res2 = UnitVector.dotProduct(v1, v3);
+    const res3 = UnitVector.dotProduct(v2, v3);
+    expect(res1).toBe(0.0);
+    expect(res2).toBe(0.0);
+    expect(res3).toBe(0.0);
+  });
+
+  test('Angle between unit vectors', () => {
+    const v1 = UnitVector.fromVector(new Vector(1,0,0));
+    const v2 = UnitVector.fromVector(new Vector(0,1,0));
+    const rad = UnitVector.angleBetween(v1, v2);
+    expect(rad).toBe(Math.PI / 2);
+  });
+
+});
+
+describe('InitVector transformations', () => {
+
+  test('Translating a UnitVector has no effect', () => {
+    const translate = map(Transform.fromTranslation(2.0, 2.0, 2.0));
+    const v1 = UnitVector.fromVector(new Vector(12, 17, 22));
+    const v2 = translate(v1);
+    expect(UnitVector.equals(v1, v2)).toBe(true);
+  });
+
+  test('Rotation around X of -90 degrees maps a unit-vector Z to another unit-vector on Y (clockwise)', () => {
+    const ang = - Math.PI / 2;
+    const v1 = UnitVector.fromVector(new Vector(0.0, 0.0, 1.0));
+    const rotX = map(Transform.fromRotationX(ang));
+    const v2 = rotX(v1);
+    const v2RotX = UnitVector.fromVector(new Vector(0.0, 1.0, 0.0));
+    expect(UnitVector.equals(v2, v2RotX)).toBe(true);
+  });
+
+  test('Rotation around X of 90 degrees maps a unit-vector Z to another unit-vector on -Y (anticlockwise)', () => {
+    const ang = Math.PI / 2;
+    const v1 = UnitVector.fromVector(new Vector(0.0, 0.0, 1.0));
+    const rotX = map(Transform.fromRotationX(ang));
+    const v2 = rotX(v1);
+    const p2RotX = UnitVector.fromVector(new Vector(0.0, -1.0, 0.0));
+    expect(UnitVector.equals(v2, p2RotX)).toBe(true);
+  })
 });

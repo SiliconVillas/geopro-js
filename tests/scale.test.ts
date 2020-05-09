@@ -12,7 +12,7 @@ describe('Rotations',() => {
 
  test('The inverse scale transform divides the point coordinates', () => {
     const p1 = new Point(1.0, 2.0, 4.0);
-    const scale = map(Transform.fromScale(2.0, 2.0, 2.0).inverse());
+    const scale = map(Transform.fromScale(2.0, 2.0, 2.0).inverte());
     const p2 = scale(p1);
     const testP2 = new Point(0.5, 1.0, 2.0);
     expect(Point.equals(p2,testP2)).toBe(true);

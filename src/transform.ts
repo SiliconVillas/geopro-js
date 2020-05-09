@@ -1,7 +1,9 @@
-import { clone, curry, reduce } from 'ramda';
-import { Point } from "./point";
-import { Matrix, Row, Col } from './types';
-import { round4, matrixMultiply } from './math';
+import { clone, curry, reduce, cond } from 'ramda';
+import { Point, isPoint } from "./point";
+import { Matrix, Row, Col, HomogeneusCoords } from './types';
+import { matrixMultiply, matrixVectorMultiply } from './math';
+import { Vector, isVector } from './vector';
+import { UnitVector, isUnitVector } from './unitvector';
 
 export class Transform {
   private _direct: Matrix;
@@ -17,25 +19,31 @@ export class Transform {
     this._inverse = clone(this._direct);
   }
 
-  dir(row: Row, col: Col) {
+  direct(row: Row, col: Col): Number {
     return this._direct[col][row];
   }
 
-  inv(row: Row, col: Col) {
+  inverse(row: Row, col: Col): Number {
     return this._inverse[col][row];
   }
 
-  inverse() {
+  inverte(): Transform {
       return Transform.fromMatrices(this._inverse, this._direct);
   }
 
-  mapPoint(p: Point): Point {
+  mapPoint = (p: Point): Point => {
     const { _direct } = this;
-    const x = round4(_direct[0][0]*p.x + _direct[1][0]*p.y + _direct[2][0]*p.z + _direct[3][0]);
-    const y = round4(_direct[0][1]*p.x + _direct[1][1]*p.y + _direct[2][1]*p.z + _direct[3][1]);
-    const z = round4(_direct[0][2]*p.x + _direct[1][2]*p.y + _direct[2][2]*p.z + _direct[3][2]);
-    const w = round4(_direct[0][3]*p.x + _direct[1][3]*p.y + _direct[2][3]*p.z + _direct[3][3]);
-    return new Point(x,y,z,w);
+    return Point.fromCoordinates(matrixVectorMultiply(_direct, p.coordinates));
+  }
+
+  mapVector = (v: Vector): Vector => {
+    const { _direct } = this;
+    return Vector.fromCoordinates(matrixVectorMultiply(_direct, v.coordinates));
+  }
+
+  mapUnitVector = (uv: UnitVector): UnitVector => {
+    const { _direct } = this;
+    return UnitVector.fromCoordinates(matrixVectorMultiply(_direct, uv.coordinates));
   }
 
   /**
@@ -78,8 +86,8 @@ export class Transform {
   }
 
   static fromRotationX(a: number) {
-    const cosa = round4(Math.cos(a));
-    const sina = round4(Math.sin(a));
+    const cosa = Math.cos(a);
+    const sina = Math.sin(a);
     return Transform.fromMatrices(
       [ [ 1.0, 0.0, 0.0, 0.0 ]
       , [ 0.0, cosa, sina, 0.0 ]
@@ -93,9 +101,10 @@ export class Transform {
       ]
     );
   }
+
   static fromRotationY(a: number) {
-    const cosa = round4(Math.cos(a));
-    const sina = round4(Math.sin(a));
+    const cosa = Math.cos(a);
+    const sina = Math.sin(a);
     return Transform.fromMatrices(
       [ [ cosa, 0.0, -sina, 0.0 ]
       , [ 0.0, 1.0, 0.0, 0.0 ]
@@ -109,23 +118,23 @@ export class Transform {
       ],
     );
   }
+
   static fromRotationZ(a: number) {
-    const cosa = round4(Math.cos(a));
-    const sina = round4(Math.sin(a));
+    const cosa = Math.cos(a);
+    const sina = Math.sin(a);
     return Transform.fromMatrices(
       [ [ cosa, -sina, 0.0, 0.0 ]
       , [ sina, cosa, 0.0, 0.0 ]
       , [ 0.0, 0.0, 1.0, 0.0 ]
       , [ 0.0, 0.0, 0.0, 1.0 ]
       ],
-      [ [ cosa, 0.0, sina, 0.0 ]
-      , [ 0.0, 1.0, 0.0, 0.0 ]
-      , [ -sina, 0.0, cosa, 0.0 ]
+      [ [ cosa, sina, 0.0 , 0.0 ]
+      , [ -sina, cosa, 0.0, 0.0 ]
+      , [ 0.0, 0.0, 1.0, 0.0 ]
       , [ 0.0, 0.0, 0.0, 1.0 ]
       ],
     );
   }
-
 
   static fromScale(tx: number, ty: number, tz: number) {
     return Transform.fromMatrices(
@@ -148,7 +157,13 @@ export class Transform {
  * Apply the transformation to a point.
  * p' = M*p
  */
-export const map = curry((t: Transform, p: Point) => t.mapPoint(p));
+export const map = curry(<T extends HomogeneusCoords>(t: Transform, o: T) =>
+  cond([
+    [ isPoint, t.mapPoint ],
+    [ isVector, t.mapVector ],
+    [ isUnitVector, t.mapUnitVector ]
+  ])(o)
+);
 
 /**
  * Compose transformation right to left (eg T2*T1)
