@@ -1,5 +1,5 @@
 
-import { Transform, map, Point, Vector } from '../src/index';
+import { Transform, map, Point, Vector, UnitVector } from '../src/index';
 
 describe('Basic Points and Transformations', () => {
 
@@ -65,3 +65,19 @@ describe('Basic Points and Transformations', () => {
     expect(p1.z).toEqual(p.z);
   });
 });
+
+describe('Point operations', () => {
+
+  test('Compute a point along a direction', () => {
+    const start = new Point(1,1,1);
+    const dir = UnitVector.fromVector(new Vector(0,0,1));
+    const t = 10;
+    const p = Point.along(t, dir, start);
+
+    const v = dir.multiplyBy(t);
+    const p2 = Point.add(v, start);
+    const expP = new Point(1,1,11);
+    expect(Point.equals(p, expP)).toBe(true);
+    expect(Point.equals(p, p2)).toBe(true);
+  })
+})

@@ -4,6 +4,7 @@ import { precision } from "./math";
 import { isNil, reduce, curry } from "ramda";
 import { Frame } from "./frame";
 import { map } from "./operations";
+import { UnitVector } from "./unitvector";
 
 export class Point  implements HomogeneusCoords {
   private _coord: PCoords;
@@ -45,6 +46,10 @@ export class Point  implements HomogeneusCoords {
   static fromCoordinates = (vals: number[]): Point => {
     return new Point(vals[0],vals[1],vals[2],vals[3]);
   }
+
+  static along = curry((t: number, dir: UnitVector, start: Point) =>
+    Point.add( dir.multiplyBy(t), start)
+  );
 
   /**
    * Returns true if the point are in the same location within tollerance
