@@ -70,7 +70,7 @@ describe('InitVector transformations', () => {
   test('Translating a UnitVector has no effect', () => {
     const translate = map(Transform.fromTranslation(2.0, 2.0, 2.0));
     const v1 = UnitVector.fromVector(new Vector(12, 17, 22));
-    const v2 = translate(v1);
+    const v2 = translate(v1) as UnitVector;
     expect(UnitVector.equals(v1, v2)).toBe(true);
   });
 
@@ -78,7 +78,7 @@ describe('InitVector transformations', () => {
     const ang = - Math.PI / 2;
     const v1 = UnitVector.fromVector(new Vector(0.0, 0.0, 1.0));
     const rotX = map(Transform.fromRotationX(ang));
-    const v2 = rotX(v1);
+    const v2 = rotX(v1) as UnitVector;
     const v2RotX = UnitVector.fromVector(new Vector(0.0, 1.0, 0.0));
     expect(UnitVector.equals(v2, v2RotX)).toBe(true);
   });
@@ -87,7 +87,7 @@ describe('InitVector transformations', () => {
     const ang = Math.PI / 2;
     const v1 = UnitVector.fromVector(new Vector(0.0, 0.0, 1.0));
     const rotX = map(Transform.fromRotationX(ang));
-    const v2 = rotX(v1);
+    const v2 = rotX(v1) as UnitVector;
     const p2RotX = UnitVector.fromVector(new Vector(0.0, -1.0, 0.0));
     expect(UnitVector.equals(v2, p2RotX)).toBe(true);
   })

@@ -1,6 +1,3 @@
-import { Point } from "./point";
-import { Vector } from "./vector";
-import { UnitVector } from "./unitvector";
 
 export type HCoords = [ number, number, number, number ];
 
@@ -18,10 +15,19 @@ export interface HomogeneusCoords {
   x: number;
   y: number;
   z: number;
+
+  map(t: GeoMatrix): any;
 }
 
-export interface GeoMapper {
-  mapPoint(p: Point): Point;
-  mapVector(v: Vector): Vector;
-  mapUnitVector(uv: UnitVector): UnitVector;
+export interface GeoMatrix {
+  readonly directMatrix: Matrix;
+  readonly inverseMatrix: Matrix;
+  direct(row: Row, col: Col): Number;
+  inverse(row: Row, col: Col): Number;
+  inverte(): GeoMatrix;
 }
+
+  // mapPoint(p: Point): Point;
+  // mapVector(v: Vector): Vector;
+  // mapUnitVector(uv: UnitVector): UnitVector;
+

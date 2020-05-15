@@ -101,7 +101,7 @@ describe('Vector transformations', () => {
   test('Translating a Vector has no effect', () => {
     const translate = map(Transform.fromTranslation(2.0, 2.0, 2.0));
     const v1 = new Vector(12, 17, 22);
-    const v2 = translate(v1);
+    const v2 = translate(v1) as Vector;
     expect(Vector.equals(v1, v2)).toBe(true);
   });
 
@@ -109,7 +109,7 @@ describe('Vector transformations', () => {
     const ang = - Math.PI / 2;
     const v1 = new Vector(0.0, 0.0, 1.0);
     const rotX = map(Transform.fromRotationX(ang));
-    const v2 = rotX(v1);
+    const v2 = rotX(v1) as Vector;
     const v2RotX = new Vector(0.0, 1.0, 0.0);
     expect(Vector.equals(v2, v2RotX)).toBe(true);
   });
@@ -118,11 +118,12 @@ describe('Vector transformations', () => {
     const ang = Math.PI / 2;
     const v1 = new Vector(0.0, 0.0, 1.0);
     const rotX = map(Transform.fromRotationX(ang));
-    const v2 = rotX(v1);
+    const v2 = rotX(v1) as Vector;
     const p2RotX = new Vector(0.0, -1.0, 0.0);
     expect(Vector.equals(v2, p2RotX)).toBe(true);
   });
 
 
 });
+
 

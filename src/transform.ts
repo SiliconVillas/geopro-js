@@ -1,11 +1,8 @@
 import { clone } from 'ramda';
-import { Point } from "./point";
-import { Matrix, Row, Col, GeoMapper } from './types';
-import { matrixMultiply, matrixVectorMultiply } from './math';
-import { Vector } from './vector';
-import { UnitVector } from './unitvector';
+import { Matrix, Row, Col, GeoMatrix } from './types';
+import { matrixMultiply } from './math';
 
-export class Transform implements GeoMapper {
+export class Transform implements GeoMatrix {
   private _direct: Matrix;
   private _inverse: Matrix;
 
@@ -19,6 +16,13 @@ export class Transform implements GeoMapper {
     this._inverse = clone(this._direct);
   }
 
+  get directMatrix() {
+    return this._direct;
+  }
+  get inverseMatrix() {
+    return this._inverse;
+  }
+
   direct(row: Row, col: Col): Number {
     return this._direct[col][row];
   }
@@ -29,21 +33,6 @@ export class Transform implements GeoMapper {
 
   inverte(): Transform {
       return Transform.fromMatrices(this._inverse, this._direct);
-  }
-
-  mapPoint = (p: Point): Point => {
-    const { _direct } = this;
-    return Point.fromCoordinates(matrixVectorMultiply(_direct, p.coordinates));
-  }
-
-  mapVector = (v: Vector): Vector => {
-    const { _direct } = this;
-    return Vector.fromCoordinates(matrixVectorMultiply(_direct, v.coordinates));
-  }
-
-  mapUnitVector = (uv: UnitVector): UnitVector => {
-    const { _direct } = this;
-    return UnitVector.fromCoordinates(matrixVectorMultiply(_direct, uv.coordinates));
   }
 
   /**
