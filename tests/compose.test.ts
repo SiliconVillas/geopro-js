@@ -80,6 +80,7 @@ describe('Compose', () => {
     const trn = Transform.fromTranslation(12, 15, 120);
     const scl = Transform.fromScale(12, 5, 20);
     const transRotDir = map(compose(rotZ, rotY, rotX, scl, trn));
+    const transRotDirInv = map(compose(rotZ, rotY, rotX, scl, trn).inverte());
     const transRotInv = map(
       compose(
         trn.inverte(),
@@ -91,9 +92,9 @@ describe('Compose', () => {
     );
     const p1 = new Point(10.0, 20.0, 30.0);
 
-    const p2a = transRotDir(p1) as Point;
-    const p2 = transRotInv(p2a) as Point;
-
+    const p2 = transRotInv(transRotDir(p1)) as Point;
+    const p3 = transRotDirInv(transRotDir(p1)) as Point;
     expect(Point.equals(p1, p2)).toBe(true);
+    expect(Point.equals(p1, p3)).toBe(true);
   });
 });

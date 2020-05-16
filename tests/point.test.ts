@@ -80,4 +80,20 @@ describe('Point operations', () => {
     expect(Point.equals(p, expP)).toBe(true);
     expect(Point.equals(p, p2)).toBe(true);
   });
+
+  test('Compute a point along a direction', () => {
+    const p0 = new Point(1, 1, 1);
+    const v0 = new Vector(1, 2, 3);
+    const v1 = new Vector(3, 2, 1);
+    const uv = UnitVector.fromVector(new Vector(1, 1, 1));
+
+    const p1 = Point.add(v0, p0); // Compute p1 = p + v
+    const p2 = Point.add(v1, p1); // Compute p2 = p1 + v
+    const v = Vector.fromPoints(p2, p0); // Compute v1 = p2 - p
+    const pt = Point.add(v.multiplyBy(0.5), p0); // Compute p(t) = p + t * v
+
+    const expPt = new Point(1 + 4 / 2, 1 + 4 / 2, 1 + 4 / 2);
+
+    expect(Point.equals(pt, expPt)).toBe(true);
+  });
 });

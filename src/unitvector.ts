@@ -3,6 +3,7 @@ import { Vector } from './vector';
 import { precision, matrixVectorMultiply } from './math';
 import { isNil, curry } from 'ramda';
 import { Frame } from './frame';
+import { Point } from './point';
 
 /**
  * A 3D unit-vector
@@ -115,6 +116,15 @@ export class UnitVector implements HomogeneusCoords {
     UnitVector.fromVCoords(
       matrixVectorMultiply(t.directMatrix, this.coordinates)
     );
+
+  /**
+   * Calculate the direction from p2 to p1
+   * @param p1
+   * @param p2
+   */
+  static fromPoints = (p1: Point, p2: Point): UnitVector => {
+    return new UnitVector(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);
+  };
 
   /**
    * Use a transformation M to return a new unit-vector u' = M·u
