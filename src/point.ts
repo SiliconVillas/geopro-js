@@ -34,8 +34,23 @@ export class Point implements HomogeneusCoords {
     return [...this._coord] as HCoords;
   }
 
-  map = (t: GeoMatrix) =>
-    Point.fromHCoords(matrixPointMultiply(t.directMatrix, this.coordinates));
+  /**
+   * Use a transformation M to return a new point p' = M·p
+   * @param m - transformation matrix
+   */
+  map = (m: GeoMatrix) =>
+    Point.fromHCoords(matrixPointMultiply(m.directMatrix, this.coordinates));
+
+  /**
+   * Create a point given the coordinates relative to a frame
+   * @param f - the frame of reference
+   * @param c - the vector components
+   */
+  static relative = curry(
+    (f: Frame, c: HCoords): Point => {
+      return Point.fromHCoords(c).map(f.inverte());
+    }
+  );
 
   /**
    * Create a point adding the given vector to this point.
@@ -51,13 +66,6 @@ export class Point implements HomogeneusCoords {
     (vs: Vector[], p: Point): Point =>
       reduce((np: Point, v: Vector) => Point.add(v, np), p)(vs)
   );
-
-  /**
-   * Create a point given the coordinates relative to a frame
-   */
-  static relative = (f: Frame, c: HCoords): Point => {
-    return Point.fromHCoords(c).map(f.inverte());
-  };
 
   /**
    * Create a point given an array of coordinates (must be 4 long)

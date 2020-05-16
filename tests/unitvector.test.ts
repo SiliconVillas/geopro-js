@@ -1,4 +1,4 @@
-import { UnitVector } from '../src/unitvector';
+import { UnitVector, isUnitVector } from '../src/unitvector';
 import { Vector, map, Transform } from '../src';
 
 describe('Basic UnitVector', () => {
@@ -14,6 +14,8 @@ describe('Basic UnitVector', () => {
     expect(uv2.y).toBe(0.0);
     expect(uv2.z).toBe(1.0);
     expect(uv1.length).toBe(1.0);
+    expect(uv1.isUnitVector).toBe(true);
+    expect(isUnitVector(uv1)).toBe(true);
   });
 
   test('Build a UnitVector and get its coordinates', () => {

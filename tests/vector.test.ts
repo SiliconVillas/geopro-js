@@ -1,4 +1,5 @@
 import { Vector, Point, map, Transform } from '../src/index';
+import { isVector } from '../src/vector';
 
 describe('Basic Vector', () => {
   test('Build a vector with 3 coordinates', () => {
@@ -6,6 +7,8 @@ describe('Basic Vector', () => {
     expect(v.x).toBe(1.0);
     expect(v.y).toBe(3.4);
     expect(v.z).toBe(5.6);
+    expect(v.isVector).toBe(true);
+    expect(isVector(v)).toBe(true);
   });
 
   test('Build a vector and get its coordinates', () => {
