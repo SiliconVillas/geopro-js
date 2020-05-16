@@ -13,29 +13,25 @@ export const compose: (...tlist: Transform[]) => Transform;
 // @public
 export class Frame implements GeoMatrix {
     constructor();
+    composeWith(t: GeoMatrix): GeoMatrix;
     // (undocumented)
     direct(row: Row, col: Col): Number;
-    // (undocumented)
     get directMatrix(): Matrix;
     static from2Vectors: (o: Point, v1: Vector, v2: Vector) => Frame;
-    // (undocumented)
     get i(): Vector;
     // (undocumented)
     inverse(row: Row, col: Col): Number;
-    // (undocumented)
     get inverseMatrix(): Matrix;
-    // (undocumented)
     inverte(): GeoMatrix;
-    // (undocumented)
     get j(): Vector;
-    // (undocumented)
     get k(): Vector;
-    // (undocumented)
     get origin(): Point;
 }
 
 // @public
 export interface GeoMatrix {
+    // (undocumented)
+    composeWith(t: GeoMatrix): GeoMatrix;
     // (undocumented)
     direct(row: Row, col: Col): Number;
     // (undocumented)
@@ -58,11 +54,11 @@ export interface HomogeneusCoords {
     // (undocumented)
     map(t: GeoMatrix): any;
     // (undocumented)
-    x: number;
+    readonly x: number;
     // (undocumented)
-    y: number;
+    readonly y: number;
     // (undocumented)
-    z: number;
+    readonly z: number;
 }
 
 // @public
@@ -87,10 +83,9 @@ export class Point implements HomogeneusCoords {
     static fromHCoords: (vals: number[]) => Point;
     // (undocumented)
     get isPoint(): boolean;
-    // (undocumented)
-    map: (t: GeoMatrix) => Point;
+    map: (m: GeoMatrix) => Point;
     static notEquals: (p1: Point, p2: Point) => boolean;
-    static relative: (f: Frame, c: HCoords) => Point;
+    static relative: import("Function/Curry").Curry<(f: Frame, p: Point) => Point>;
     // (undocumented)
     get x(): number;
     // (undocumented)
@@ -107,7 +102,7 @@ export class Transform implements GeoMatrix {
     constructor();
     // (undocumented)
     static byInverting(t: Transform): Transform;
-    composeWith(t: Transform): Transform;
+    composeWith(t: GeoMatrix): GeoMatrix;
     // (undocumented)
     direct(row: Row, col: Col): Number;
     // (undocumented)
@@ -132,38 +127,26 @@ export class Transform implements GeoMatrix {
 
 // @public
 export class UnitVector implements HomogeneusCoords {
-    // (undocumented)
+    constructor(x?: number, y?: number, z?: number);
     static angleBetween: (v1: UnitVector, v2: UnitVector) => number;
-    // (undocumented)
     get coordinates(): VCoords;
-    // (undocumented)
     static crossProduct: (v1: UnitVector, v2: UnitVector) => UnitVector;
-    // (undocumented)
     static dotProduct: (v1: UnitVector, v2: UnitVector) => number;
     // (undocumented)
     static equals: (v1: UnitVector, v2: UnitVector) => boolean;
-    // (undocumented)
     static fromVCoords(c: VCoords): UnitVector;
     // (undocumented)
     static fromVector(v: Vector): UnitVector;
-    // (undocumented)
     get isUnitVector(): boolean;
-    // (undocumented)
     get length(): number;
-    // (undocumented)
     map: (t: GeoMatrix) => UnitVector;
-    // (undocumented)
     multiplyBy(s: number): Vector;
     // (undocumented)
     static notEquals: (v1: UnitVector, v2: UnitVector) => boolean;
     static parallel: (v1: UnitVector, v2: UnitVector) => boolean;
-    // (undocumented)
-    static relative: (f: Frame, c: VCoords) => UnitVector;
-    // (undocumented)
+    static relative: import("Function/Curry").Curry<(f: Frame, u: UnitVector) => UnitVector>;
     get x(): number;
-    // (undocumented)
     get y(): number;
-    // (undocumented)
     get z(): number;
 }
 
@@ -175,37 +158,26 @@ export class Vector implements HomogeneusCoords {
     constructor(x: number, y: number, z: number);
     // (undocumented)
     static adds: (...vs: Vector[]) => Vector;
-    // (undocumented)
     get coordinates(): VCoords;
     // (undocumented)
     static crossProduct: (v1: Vector, v2: Vector) => Vector;
     // (undocumented)
     static dotProduct: (v1: Vector, v2: Vector) => number;
-    // (undocumented)
     static equals: (v1: Vector, v2: Vector) => boolean;
     // (undocumented)
     static fromPoints: (p1: Point, p2: Point) => Vector;
-    // (undocumented)
     static fromVCoords: (vals: VCoords) => Vector;
-    // (undocumented)
     get isVector(): boolean;
-    // (undocumented)
     get length(): number;
-    // (undocumented)
-    map(t: GeoMatrix): Vector;
-    // (undocumented)
+    map(m: GeoMatrix): Vector;
     multiplyBy: (s: number) => Vector;
     // (undocumented)
     static notEquals: (v1: Vector, v2: Vector) => boolean;
     // (undocumented)
     static parallel: (v1: Vector, v2: Vector) => boolean;
-    // (undocumented)
-    static relative: (f: Frame, c: VCoords) => Vector;
-    // (undocumented)
+    static relative: import("Function/Curry").Curry<(f: Frame, v: Vector) => Vector>;
     get x(): number;
-    // (undocumented)
     get y(): number;
-    // (undocumented)
     get z(): number;
 }
 

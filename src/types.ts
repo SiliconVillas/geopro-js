@@ -40,9 +40,9 @@ export type Col = 0 | 1 | 2 | 3;
  */
 export interface HomogeneusCoords {
   coordinates: HCoords;
-  x: number;
-  y: number;
-  z: number;
+  readonly x: number;
+  readonly y: number;
+  readonly z: number;
 
   map(t: GeoMatrix): any;
 }
@@ -57,4 +57,5 @@ export interface GeoMatrix {
   direct(row: Row, col: Col): Number;
   inverse(row: Row, col: Col): Number;
   inverte(): GeoMatrix;
+  composeWith(t: GeoMatrix): GeoMatrix;
 }

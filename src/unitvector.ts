@@ -19,10 +19,15 @@ export class UnitVector implements HomogeneusCoords {
   }
 
   /**
-   * Build a standard unit vector along the X axis
+   * Build a unit vector. (by default along the X axis).
+   * @param x - x component
+   * @param y - y component
+   * @param z - z component
    */
-  private constructor() {
-    this._coord = [1.0, 0.0, 0.0, 0];
+  constructor(x = 1.0, y = 0.0, z = 0.0) {
+    const v = new Vector(x, y, z);
+    const l = v.length;
+    this._coord = [v.x / l, v.y / l, v.z / l, 0];
   }
 
   /**
@@ -116,9 +121,7 @@ export class UnitVector implements HomogeneusCoords {
    * @param m - transformation matrix
    */
   static relative = curry(
-    (f: Frame, c: VCoords): UnitVector => {
-      return UnitVector.fromVCoords(c).map(f.inverte());
-    }
+    (f: Frame, u: UnitVector): UnitVector => u.map(f.inverte())
   );
 
   static equals = (v1: UnitVector, v2: UnitVector): boolean => {

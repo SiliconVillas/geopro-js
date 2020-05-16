@@ -19,11 +19,17 @@ export declare const compose: (...tlist: Transform[]) => Transform;
 export declare class Frame implements GeoMatrix {
     private _direct;
     private _inverse;
+    /**
+     * Build a frame directly with 2 matrices
+     * @param dir - Direct matrix
+     * @param inv - its inverse
+     * @internal
+     */
     private static fromMatrices;
-    get directMatrix(): Matrix;
-    get inverseMatrix(): Matrix;
-    direct(row: Row, col: Col): Number;
-    inverse(row: Row, col: Col): Number;
+    /**
+     * Build an Identity frame, center in the origin and aligned
+     * along the main three axes.
+     */
     constructor();
     /**
      * Build a Frame throug an origin and 2 independent vector.
@@ -34,11 +40,47 @@ export declare class Frame implements GeoMatrix {
      * @param v2 - a vector in the XY plane of the new frame
      */
     static from2Vectors: (o: Point, v1: Vector, v2: Vector) => Frame;
+    /**
+     * Retrive the matrix used to transform from this frame to
+     * the global frame.
+     */
+    get directMatrix(): Matrix;
+    /**
+     * Retrieve the matrix used to transform from global frame
+     * to this frame
+     */
+    get inverseMatrix(): Matrix;
+    direct(row: Row, col: Col): Number;
+    inverse(row: Row, col: Col): Number;
+    /**
+     * The i vector for this frame
+     */
     get i(): Vector;
+    /**
+     * The j vector for this frame
+     */
     get j(): Vector;
+    /**
+     * The k vector for this frame
+     */
     get k(): Vector;
+    /**
+     * The origin of this frame
+     */
     get origin(): Point;
+    /**
+     * Inverte the transformation defined for this frame.
+     */
     inverte(): GeoMatrix;
+    /**
+     * Builds and returns the composition of t with the
+     * transformation represented by this frame.
+     * This can be use to transform a frame to another
+     * by using simple trasnformations.
+     * That is: resM = t.M · this.M
+     * @param t - the transformation to compose with
+     */
+    composeWith(t: GeoMatrix): GeoMatrix;
 }
 
 /**
@@ -51,6 +93,7 @@ export declare interface GeoMatrix {
     direct(row: Row, col: Col): Number;
     inverse(row: Row, col: Col): Number;
     inverte(): GeoMatrix;
+    composeWith(t: GeoMatrix): GeoMatrix;
 }
 
 /**
@@ -65,16 +108,16 @@ export declare type HCoords = [number, number, number, number];
  */
 export declare interface HomogeneusCoords {
     coordinates: HCoords;
-    x: number;
-    y: number;
-    z: number;
+    readonly x: number;
+    readonly y: number;
+    readonly z: number;
     map(t: GeoMatrix): any;
 }
 
 /**
  * Apply the transformation to a point.
  * p' = M*p
- * @param t - a transformation
+ * @param t - a transformation or a frame of reference
  * @param o - a transformable object (i.e an object derived from HomogeneusCoords)
  * @public
  */
@@ -104,7 +147,17 @@ export declare class Point implements HomogeneusCoords {
     get y(): number;
     get z(): number;
     get coordinates(): HCoords;
-    map: (t: GeoMatrix) => Point;
+    /**
+     * Use a transformation M to return a new point p' = M·p
+     * @param m - transformation matrix
+     */
+    map: (m: GeoMatrix) => Point;
+    /**
+     * Create a point given the coordinates relative to a frame
+     * @param f - the frame of reference
+     * @param c - the vector components
+     */
+    static relative: import("Function/Curry").Curry<(f: Frame, p: Point) => Point>;
     /**
      * Create a point adding the given vector to this point.
      */
@@ -113,10 +166,6 @@ export declare class Point implements HomogeneusCoords {
      * Create a point adding all the vectors to this point.
      */
     static adds: import("Function/Curry").Curry<(vs: Vector[], p: Point) => Point>;
-    /**
-     * Create a point given the coordinates relative to a frame
-     */
-    static relative: (f: Frame, c: HCoords) => Point;
     /**
      * Create a point given an array of coordinates (must be 4 long)
      */
@@ -152,11 +201,11 @@ export declare class Transform implements GeoMatrix {
     inverse(row: Row, col: Col): Number;
     inverte(): Transform;
     /**
-     * return the composition of t with this transformation
-     * That is: resM = t.M * this.M
+     * Builds and returns the composition of t with this transformation
+     * That is: resM = t.M · this.M
      * @param t - the transformation to compose with
      */
-    composeWith(t: Transform): Transform;
+    composeWith(t: GeoMatrix): GeoMatrix;
     private static fromMatrices;
     static byInverting(t: Transform): Transform;
     static fromTranslation(tx: number, ty: number, tz: number): Transform;
@@ -173,27 +222,95 @@ export declare class Transform implements GeoMatrix {
 export declare class UnitVector implements HomogeneusCoords {
     private _coord;
     static fromVector(v: Vector): UnitVector;
-    private constructor();
+    /**
+     * Build a unit vector. (by default along the X axis).
+     * @param x - x component
+     * @param y - y component
+     * @param z - z component
+     */
+    constructor(x?: number, y?: number, z?: number);
+    /**
+     * Build a new unit-vector given 3 components
+     * @param x - X component
+     * @param y - Y component
+     * @param z - Z component
+     */
     private static fromComponents;
+    /**
+     * Build a new unit-vector given vector components
+     * @param c - components
+     */
     static fromVCoords(c: VCoords): UnitVector;
+    /**
+     * return tru if the object is a UnitVector
+     */
     get isUnitVector(): boolean;
+    /**
+     * Get component along the X axis
+     */
     get x(): number;
+    /**
+     * Get component along the Y axis
+     */
     get y(): number;
+    /**
+     * Get component along the Z axis
+     */
     get z(): number;
+    /**
+     * Get the unit-vector components
+     */
     get coordinates(): VCoords;
+    /**
+     * Retrieve the length of the vector: |v|
+     * For unit-vector the length is always 1
+     */
     get length(): number;
-    map: (t: GeoMatrix) => UnitVector;
+    /**
+     * Return a new vector along the direction of this unit-vector and
+     * of length s
+     * @param s - the multiplier
+     */
     multiplyBy(s: number): Vector;
-    static relative: (f: Frame, c: VCoords) => UnitVector;
+    /**
+     * Use a transformation M to return a new unit-vector u' = M·u
+     * @param m - transformation matrix
+     */
+    map: (t: GeoMatrix) => UnitVector;
+    /**
+     * Use a transformation M to return a new unit-vector u' = M·u
+     * @param m - transformation matrix
+     */
+    static relative: import("Function/Curry").Curry<(f: Frame, u: UnitVector) => UnitVector>;
     static equals: (v1: UnitVector, v2: UnitVector) => boolean;
     static notEquals: (v1: UnitVector, v2: UnitVector) => boolean;
     /**
-     * Returns true if the two unit vector are parallel
-     * Same or opposite direction
+     * Returns true if the two unit vectors are parallel
+     * Note: vector can point in the same or opposite direction
+     * @param v1 - a first unit-vector
+     * @param v2 - a second unit-vector
      */
     static parallel: (v1: UnitVector, v2: UnitVector) => boolean;
+    /**
+     * Returns a new UnitVector computed as the cross-product
+     * of the two unit-vector passed as parameter: u' = u1 x u2
+     * @param v1 - a first unit-vector
+     * @param v2 - a second unit-vector
+     */
     static crossProduct: (v1: UnitVector, v2: UnitVector) => UnitVector;
+    /**
+     * Return the result of the dot-product of the two unit-vectors
+     * Note: Uses the right-hand rule.
+     * @param v1 - a first unit-vector
+     * @param v2 - a second unit-vector
+     */
     static dotProduct: (v1: UnitVector, v2: UnitVector) => number;
+    /**
+     * Return the angle between two unit-vectors.
+     * Note: Uses the right-hand rule.
+     * @param v1 - a first unit-vector
+     * @param v2 - a second unit-vector
+     */
     static angleBetween: (v1: UnitVector, v2: UnitVector) => number;
 }
 
@@ -209,17 +326,63 @@ export declare type VCoords = [number, number, number, 0.0];
  */
 export declare class Vector implements HomogeneusCoords {
     private _coord;
+    /**
+     * Build a vector in space with the given components
+     * @param x - X component
+     * @param y - Y component
+     * @param z - Z component
+     */
     constructor(x: number, y: number, z: number);
-    get isVector(): boolean;
-    get x(): number;
-    get y(): number;
-    get z(): number;
-    get coordinates(): VCoords;
-    get length(): number;
-    multiplyBy: (s: number) => Vector;
-    map(t: GeoMatrix): Vector;
-    static relative: (f: Frame, c: VCoords) => Vector;
+    /**
+     * Build a new vector given vector components
+     * @param c - components
+     */
     static fromVCoords: (vals: VCoords) => Vector;
+    /**
+     * Return true is the object is a Vector
+     */
+    get isVector(): boolean;
+    /**
+     * Get component along the X axis
+     */
+    get x(): number;
+    /**
+     * Get component along the Y axis
+     */
+    get y(): number;
+    /**
+     * Get component along the Z axis
+     */
+    get z(): number;
+    /**
+     * Get the vector components
+     */
+    get coordinates(): VCoords;
+    /**
+     * Retrieve the length of the vector: |v|
+     */
+    get length(): number;
+    /**
+     * Return a new vector by multiplying this one by a scalar
+     * @param s - the multiplier
+     */
+    multiplyBy: (s: number) => Vector;
+    /**
+     * Use a transformation M to return a new vector v' = M·v
+     * @param m - transformation matrix
+     */
+    map(m: GeoMatrix): Vector;
+    /**
+     * Create a vector given the coordinates relative to a frame
+     * @param f - the frame of reference
+     * @param c - the vector components
+     */
+    static relative: import("Function/Curry").Curry<(f: Frame, v: Vector) => Vector>;
+    /**
+     * Determine if two vectors are equals (within tollerance)
+     * @param v1 -
+     * @param v2 -
+     */
     static equals: (v1: Vector, v2: Vector) => boolean;
     static notEquals: (v1: Vector, v2: Vector) => boolean;
     static parallel: (v1: Vector, v2: Vector) => boolean;

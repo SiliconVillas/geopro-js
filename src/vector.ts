@@ -102,12 +102,13 @@ export class Vector implements HomogeneusCoords {
    * @param f - the frame of reference
    * @param c - the vector components
    */
-  static relative = curry(
-    (f: Frame, c: VCoords): Vector => {
-      return Vector.fromVCoords(c).map(f.inverte());
-    }
-  );
+  static relative = curry((f: Frame, v: Vector): Vector => v.map(f.inverte()));
 
+  /**
+   * Determine if two vectors are equals (within tollerance)
+   * @param v1 -
+   * @param v2 -
+   */
   static equals = (v1: Vector, v2: Vector): boolean => {
     return (
       Math.abs(v1.x - v2.x) < precision &&

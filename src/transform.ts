@@ -40,16 +40,16 @@ export class Transform implements GeoMatrix {
   }
 
   /**
-   * return the composition of t with this transformation
-   * That is: resM = t.M * this.M
+   * Builds and returns the composition of t with this transformation
+   * That is: resM = t.M · this.M
    * @param t - the transformation to compose with
    */
-  composeWith(t: Transform): Transform {
-    const { _direct: dm1, _inverse: im1 } = this;
-    const { _direct: dm2, _inverse: im2 } = t;
+  composeWith(t: GeoMatrix): GeoMatrix {
+    const { directMatrix: dm1, inverseMatrix: im1 } = this;
+    const { directMatrix: dm2, inverseMatrix: im2 } = t;
     const resM: Matrix = matrixMultiply(dm2, dm1);
     const invResM: Matrix = matrixMultiply(im1, im2);
-    return Transform.fromMatrices(resM, invResM);
+    return Transform.fromMatrices(resM, invResM) as GeoMatrix;
   }
 
   private static fromMatrices(dir: Matrix, inv: Matrix) {

@@ -46,11 +46,7 @@ export class Point implements HomogeneusCoords {
    * @param f - the frame of reference
    * @param c - the vector components
    */
-  static relative = curry(
-    (f: Frame, c: HCoords): Point => {
-      return Point.fromHCoords(c).map(f.inverte());
-    }
-  );
+  static relative = curry((f: Frame, p: Point): Point => p.map(f.inverte()));
 
   /**
    * Create a point adding the given vector to this point.
