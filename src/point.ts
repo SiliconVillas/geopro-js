@@ -5,7 +5,12 @@ import { isNil, reduce, curry } from 'ramda';
 import { Frame } from './frame';
 import { UnitVector } from './unitvector';
 
+/**
+ * A 3D point
+ * @public
+ */
 export class Point implements HomogeneusCoords {
+  // @internal
   private _coord: PCoords;
 
   constructor(x: number, y: number, z: number, w = 1.0) {

@@ -5,6 +5,10 @@ import { UnitVector } from './unitvector';
 import { invertAffineOrtogonalMatrix } from './math';
 import { clone } from 'ramda';
 
+/**
+ * A frame of reference
+ * @public
+ */
 export class Frame implements GeoMatrix {
   private _direct: Matrix;
   private _inverse: Matrix;
@@ -45,9 +49,9 @@ export class Frame implements GeoMatrix {
    * Build a Frame throug an origin and 2 independent vector.
    * The first vector will be considered the Z direction
    * The second vector will point in the semi-space of x
-   * @param o
-   * @param v1
-   * @param v2
+   * @param o - origin point
+   * @param v1 - a vector indicating the Z of the new frame
+   * @param v2 - a vector in the XY plane of the new frame
    */
   static from2Vectors = (o: Point, v1: Vector, v2: Vector) => {
     const k = UnitVector.fromVector(v1);

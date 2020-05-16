@@ -5,6 +5,10 @@ import { reduce, isNil } from 'ramda';
 import { UnitVector } from './unitvector';
 import { Frame } from './frame';
 
+/**
+ * A 3D vector
+ * @public
+ */
 export class Vector implements HomogeneusCoords {
   private _coord: VCoords;
 

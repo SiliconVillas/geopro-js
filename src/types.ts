@@ -1,15 +1,43 @@
+/**
+ * Homogeneus coordinates for transformable points or vector
+ * @public
+ */
+export type HCoords = [number, number, number, number];
 
-export type HCoords = [ number, number, number, number ];
+/**
+ * Homogeneus coordinates for transformable points
+ * @public
+ */
+export type PCoords = [number, number, number, 1.0];
 
-// Each Hcoords is a column in the matrix
-export type Matrix = [ HCoords, HCoords, HCoords, HCoords ];
+/**
+ * Homogeneus coordinates for transformable vectors
+ * @public
+ */
+export type VCoords = [number, number, number, 0.0];
 
+/**
+ * Note: each HCoords is a column in the matrix
+ * @public
+ */
+export type Matrix = [HCoords, HCoords, HCoords, HCoords];
+
+/**
+ * Possible row index of a Matrix
+ * @public
+ */
 export type Row = 0 | 1 | 2 | 3;
+
+/**
+ * Possible column index of a Matrix
+ * @public
+ */
 export type Col = 0 | 1 | 2 | 3;
 
-export type VCoords = [ number, number, number, 0.0 ];
-export type PCoords = [ number, number, number, 1.0 ];
-
+/**
+ * A transformable object must implement this interface
+ * @public
+ */
 export interface HomogeneusCoords {
   coordinates: HCoords;
   x: number;
@@ -19,6 +47,10 @@ export interface HomogeneusCoords {
   map(t: GeoMatrix): any;
 }
 
+/**
+ * A transformation object must implement this interface
+ * @public
+ */
 export interface GeoMatrix {
   readonly directMatrix: Matrix;
   readonly inverseMatrix: Matrix;
@@ -26,8 +58,3 @@ export interface GeoMatrix {
   inverse(row: Row, col: Col): Number;
   inverte(): GeoMatrix;
 }
-
-  // mapPoint(p: Point): Point;
-  // mapVector(v: Vector): Vector;
-  // mapUnitVector(uv: UnitVector): UnitVector;
-

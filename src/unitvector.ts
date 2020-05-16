@@ -4,6 +4,10 @@ import { precision, matrixVectorMultiply } from './math';
 import { isNil } from 'ramda';
 import { Frame } from './frame';
 
+/**
+ * A 3D unit-vector
+ * @public
+ */
 export class UnitVector implements HomogeneusCoords {
   private _coord: VCoords;
 

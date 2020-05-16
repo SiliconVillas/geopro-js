@@ -1,3 +1,4 @@
+export * from './types';
 export { Point } from './point';
 export { Vector } from './vector';
 export { UnitVector } from './unitvector';
