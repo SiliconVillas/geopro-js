@@ -5,15 +5,18 @@
 ```ts
 
 // @public
+export type AffineGeoMatrix = GeoMatrix & InvertableGroMatrix;
+
+// @public
 export type Col = 0 | 1 | 2 | 3;
 
 // @public
-export const compose: (...tlist: Transform[]) => Transform;
+export const compose: (...l: GeoMatrix[]) => GeoMatrix;
 
 // @public
-export class Frame implements GeoMatrix {
+export class Frame implements GeoMatrix, InvertableGroMatrix {
     constructor();
-    composeWith(t: GeoMatrix): GeoMatrix;
+    composeWith(t: AffineGeoMatrix): AffineGeoMatrix;
     // (undocumented)
     direct(row: Row, col: Col): Number;
     get directMatrix(): Matrix;
@@ -36,12 +39,6 @@ export interface GeoMatrix {
     direct(row: Row, col: Col): Number;
     // (undocumented)
     readonly directMatrix: Matrix;
-    // (undocumented)
-    inverse(row: Row, col: Col): Number;
-    // (undocumented)
-    readonly inverseMatrix: Matrix;
-    // (undocumented)
-    inverte(): GeoMatrix;
 }
 
 // @public
@@ -62,10 +59,23 @@ export interface HomogeneusCoords {
 }
 
 // @public
+export interface InvertableGroMatrix {
+    // (undocumented)
+    inverse(row: Row, col: Col): Number;
+    // (undocumented)
+    readonly inverseMatrix: Matrix;
+    // (undocumented)
+    inverte(): GeoMatrix;
+}
+
+// @public
 export const map: import("Function/Curry").Curry<(<T extends HomogeneusCoords>(t: GeoMatrix, o: T) => T)>;
 
 // @public
 export type Matrix = [HCoords, HCoords, HCoords, HCoords];
+
+// @public (undocumented)
+export const matrixMultiply: (t1: Matrix, t2: Matrix) => Matrix;
 
 // @public
 export type PCoords = [number, number, number, 1.0];
@@ -95,14 +105,44 @@ export class Point implements HomogeneusCoords {
 }
 
 // @public
+export class Project implements GeoMatrix {
+    constructor(fov?: number);
+    composeWith(t: GeoMatrix): Project;
+    // (undocumented)
+    direct(row: Row, col: Col): Number;
+    // (undocumented)
+    get directMatrix(): Matrix;
+    // (undocumented)
+    static fovScale(fov: number): number;
+    // (undocumented)
+    static fromProjectOnXY(viewDist: number, fov: number): Project;
+    // (undocumented)
+    static fromProjectOnXZ(viewDist: number, fov: number): Project;
+    // (undocumented)
+    static fromProjectOnYZ(viewDist: number, fov: number): Project;
+}
+
+// @public (undocumented)
+export const round1: import("Function/Curry").Curry<(n: number) => number> & ((n: number) => number);
+
+// @public (undocumented)
+export const round2: import("Function/Curry").Curry<(n: number) => number> & ((n: number) => number);
+
+// @public (undocumented)
+export const round3: import("Function/Curry").Curry<(n: number) => number> & ((n: number) => number);
+
+// @public (undocumented)
+export const round4: import("Function/Curry").Curry<(n: number) => number> & ((n: number) => number);
+
+// @public
 export type Row = 0 | 1 | 2 | 3;
 
 // @public
-export class Transform implements GeoMatrix {
+export class Transform implements GeoMatrix, InvertableGroMatrix {
     constructor();
     // (undocumented)
     static byInverting(t: Transform): Transform;
-    composeWith(t: GeoMatrix): GeoMatrix;
+    composeWith(t: AffineGeoMatrix): AffineGeoMatrix;
     // (undocumented)
     direct(row: Row, col: Col): Number;
     // (undocumented)
@@ -134,6 +174,7 @@ export class UnitVector implements HomogeneusCoords {
     static dotProduct: (v1: UnitVector, v2: UnitVector) => number;
     // (undocumented)
     static equals: (v1: UnitVector, v2: UnitVector) => boolean;
+    static fromPoints: (p1: Point, p2: Point) => UnitVector;
     static fromVCoords(c: VCoords): UnitVector;
     // (undocumented)
     static fromVector(v: Vector): UnitVector;

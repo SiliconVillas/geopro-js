@@ -1,5 +1,11 @@
 
 /**
+ * Invertable transformation (affine trasnformation only)
+ * @public
+ */
+export declare type AffineGeoMatrix = GeoMatrix & InvertableGroMatrix;
+
+/**
  * Possible column index of a Matrix
  * @public
  */
@@ -10,13 +16,13 @@ export declare type Col = 0 | 1 | 2 | 3;
  * @param tlist - a list of transformation to combine
  * @public
  */
-export declare const compose: (...tlist: Transform[]) => Transform;
+export declare const compose: (...l: GeoMatrix[]) => GeoMatrix;
 
 /**
  * A frame of reference
  * @public
  */
-export declare class Frame implements GeoMatrix {
+export declare class Frame implements GeoMatrix, InvertableGroMatrix {
     private _direct;
     private _inverse;
     /**
@@ -80,7 +86,7 @@ export declare class Frame implements GeoMatrix {
      * That is: resM = t.M · this.M
      * @param t - the transformation to compose with
      */
-    composeWith(t: GeoMatrix): GeoMatrix;
+    composeWith(t: AffineGeoMatrix): AffineGeoMatrix;
 }
 
 /**
@@ -89,10 +95,7 @@ export declare class Frame implements GeoMatrix {
  */
 export declare interface GeoMatrix {
     readonly directMatrix: Matrix;
-    readonly inverseMatrix: Matrix;
     direct(row: Row, col: Col): Number;
-    inverse(row: Row, col: Col): Number;
-    inverte(): GeoMatrix;
     composeWith(t: GeoMatrix): GeoMatrix;
 }
 
@@ -115,6 +118,16 @@ export declare interface HomogeneusCoords {
 }
 
 /**
+ * An invertable transformation object must implement this interface
+ * @public
+ */
+export declare interface InvertableGroMatrix {
+    readonly inverseMatrix: Matrix;
+    inverse(row: Row, col: Col): Number;
+    inverte(): GeoMatrix;
+}
+
+/**
  * Apply the transformation to a point.
  * p' = M*p
  * @param t - a transformation or a frame of reference
@@ -128,6 +141,11 @@ export declare const map: import("Function/Curry").Curry<(<T extends HomogeneusC
  * @public
  */
 export declare type Matrix = [HCoords, HCoords, HCoords, HCoords];
+
+/**
+ * @public
+ */
+export declare const matrixMultiply: (t1: Matrix, t2: Matrix) => Matrix;
 
 /**
  * Homogeneus coordinates for transformable points
@@ -182,16 +200,64 @@ export declare class Point implements HomogeneusCoords {
 }
 
 /**
+ * A simple projection transformation
+ * @public
+ */
+export declare class Project implements GeoMatrix {
+    private _direct;
+    private _fov;
+    /**
+     * build a basic projection on XY on Z=-1
+     * @param fov - Field of view angle (in radians)
+     */
+    constructor(fov?: number);
+    get directMatrix(): Matrix;
+    direct(row: Row, col: Col): Number;
+    /**
+     * Builds and returns the composition of t with this transformation
+     * That is: resM = t.M · this.M
+     * @param t - the transformation to compose with
+     */
+    composeWith(t: GeoMatrix): Project;
+    private get fovScale();
+    static fovScale(fov: number): number;
+    static fromProjectOnXY(viewDist: number, fov: number): Project;
+    static fromProjectOnXZ(viewDist: number, fov: number): Project;
+    static fromProjectOnYZ(viewDist: number, fov: number): Project;
+    private static fromMatrices;
+}
+
+/**
+ * @public
+ */
+export declare const round1: import("Function/Curry").Curry<(n: number) => number> & ((n: number) => number);
+
+/**
+ * @public
+ */
+export declare const round2: import("Function/Curry").Curry<(n: number) => number> & ((n: number) => number);
+
+/**
+ * @public
+ */
+export declare const round3: import("Function/Curry").Curry<(n: number) => number> & ((n: number) => number);
+
+/**
+ * @public
+ */
+export declare const round4: import("Function/Curry").Curry<(n: number) => number> & ((n: number) => number);
+
+/**
  * Possible row index of a Matrix
  * @public
  */
 export declare type Row = 0 | 1 | 2 | 3;
 
 /**
- * A 3D transformation
+ * A affine 3D transformation
  * @public
  */
-export declare class Transform implements GeoMatrix {
+export declare class Transform implements GeoMatrix, InvertableGroMatrix {
     private _direct;
     private _inverse;
     constructor();
@@ -205,7 +271,7 @@ export declare class Transform implements GeoMatrix {
      * That is: resM = t.M · this.M
      * @param t - the transformation to compose with
      */
-    composeWith(t: GeoMatrix): GeoMatrix;
+    composeWith(t: AffineGeoMatrix): AffineGeoMatrix;
     private static fromMatrices;
     static byInverting(t: Transform): Transform;
     static fromTranslation(tx: number, ty: number, tz: number): Transform;
@@ -277,6 +343,12 @@ export declare class UnitVector implements HomogeneusCoords {
      * @param m - transformation matrix
      */
     map: (t: GeoMatrix) => UnitVector;
+    /**
+     * Calculate the direction from p2 to p1
+     * @param p1 - first point
+     * @param p2 - seconf point
+     */
+    static fromPoints: (p1: Point, p2: Point) => UnitVector;
     /**
      * Use a transformation M to return a new unit-vector u' = M·u
      * @param m - transformation matrix

@@ -119,8 +119,8 @@ export class UnitVector implements HomogeneusCoords {
 
   /**
    * Calculate the direction from p2 to p1
-   * @param p1
-   * @param p2
+   * @param p1 - first point
+   * @param p2 - seconf point
    */
   static fromPoints = (p1: Point, p2: Point): UnitVector => {
     return new UnitVector(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);

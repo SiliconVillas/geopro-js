@@ -1,6 +1,14 @@
 import { Point } from './point';
 import { Vector } from './vector';
-import { Matrix, GeoMatrix, Row, Col, VCoords } from './types';
+import {
+  Matrix,
+  GeoMatrix,
+  Row,
+  Col,
+  VCoords,
+  InvertableGroMatrix,
+  AffineGeoMatrix,
+} from './types';
 import { UnitVector } from './unitvector';
 import { invertAffineOrtogonalMatrix, matrixMultiply } from './math';
 import { clone } from 'ramda';
@@ -9,7 +17,7 @@ import { clone } from 'ramda';
  * A frame of reference
  * @public
  */
-export class Frame implements GeoMatrix {
+export class Frame implements GeoMatrix, InvertableGroMatrix {
   private _direct: Matrix;
   private _inverse: Matrix;
 
@@ -129,11 +137,11 @@ export class Frame implements GeoMatrix {
    * That is: resM = t.M · this.M
    * @param t - the transformation to compose with
    */
-  composeWith(t: GeoMatrix): GeoMatrix {
+  composeWith(t: AffineGeoMatrix): AffineGeoMatrix {
     const { directMatrix: dm1, inverseMatrix: im1 } = this;
     const { directMatrix: dm2, inverseMatrix: im2 } = t;
     const resM: Matrix = matrixMultiply(dm2, dm1);
     const invResM: Matrix = matrixMultiply(im1, im2);
-    return Frame.fromMatrices(invResM, resM) as GeoMatrix;
+    return Frame.fromMatrices(invResM, resM) as AffineGeoMatrix;
   }
 }

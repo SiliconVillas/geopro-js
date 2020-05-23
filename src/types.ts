@@ -53,9 +53,22 @@ export interface HomogeneusCoords {
  */
 export interface GeoMatrix {
   readonly directMatrix: Matrix;
-  readonly inverseMatrix: Matrix;
   direct(row: Row, col: Col): Number;
-  inverse(row: Row, col: Col): Number;
-  inverte(): GeoMatrix;
   composeWith(t: GeoMatrix): GeoMatrix;
 }
+
+/**
+ * An invertable transformation object must implement this interface
+ * @public
+ */
+export interface InvertableGroMatrix {
+  readonly inverseMatrix: Matrix;
+  inverse(row: Row, col: Col): Number;
+  inverte(): GeoMatrix;
+}
+
+/**
+ * Invertable transformation (affine trasnformation only)
+ * @public
+ */
+export type AffineGeoMatrix = GeoMatrix & InvertableGroMatrix;

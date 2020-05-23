@@ -8,10 +8,12 @@ import pkg from './package.json';
 const esModule = {
   file: pkg.module,
   format: 'es',
+  sourcemap: true,
 };
 const esmModule = {
   file: pkg.esm,
   format: 'esm',
+  sourcemap: true,
 };
 const cjModule = {
   file: pkg.main,

@@ -1,12 +1,19 @@
 import { clone } from 'ramda';
-import { Matrix, Row, Col, GeoMatrix } from './types';
+import {
+  Matrix,
+  Row,
+  Col,
+  GeoMatrix,
+  InvertableGroMatrix,
+  AffineGeoMatrix,
+} from './types';
 import { matrixMultiply } from './math';
 
 /**
- * A 3D transformation
+ * A affine 3D transformation
  * @public
  */
-export class Transform implements GeoMatrix {
+export class Transform implements GeoMatrix, InvertableGroMatrix {
   private _direct: Matrix;
   private _inverse: Matrix;
 
@@ -44,12 +51,12 @@ export class Transform implements GeoMatrix {
    * That is: resM = t.M · this.M
    * @param t - the transformation to compose with
    */
-  composeWith(t: GeoMatrix): GeoMatrix {
+  composeWith(t: AffineGeoMatrix): AffineGeoMatrix {
     const { directMatrix: dm1, inverseMatrix: im1 } = this;
     const { directMatrix: dm2, inverseMatrix: im2 } = t;
     const resM: Matrix = matrixMultiply(dm2, dm1);
     const invResM: Matrix = matrixMultiply(im1, im2);
-    return Transform.fromMatrices(resM, invResM) as GeoMatrix;
+    return Transform.fromMatrices(resM, invResM) as AffineGeoMatrix;
   }
 
   private static fromMatrices(dir: Matrix, inv: Matrix) {

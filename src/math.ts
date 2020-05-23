@@ -8,8 +8,26 @@ export const round = curry((p: number, n: number) => {
   return Math.round(n * m) / m;
 });
 
+/**
+ * @public
+ */
 export const round4 = round(4);
+/**
+ * @public
+ */
+export const round3 = round(2);
+/**
+ * @public
+ */
+export const round2 = round(2);
+/**
+ * @public
+ */
+export const round1 = round(2);
 
+/**
+ * @public
+ */
 export const matrixMultiply = (t1: Matrix, t2: Matrix): Matrix => {
   const res: Matrix = [
     [1.0, 0.0, 0.0, 0.0], // col 0
