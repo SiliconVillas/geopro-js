@@ -22,7 +22,7 @@ describe('Rotations X', () => {
   test('Inverse rotation around X of 90 degrees maps a point on Z to another point on Y (anticlockwise)', () => {
     const ang = Math.PI / 2;
     const p1 = new Point(0.0, 0.0, 1.0);
-    const rotX = map(Transform.fromRotationX(ang).inverte());
+    const rotX = map(Transform.fromRotationX(ang).invert());
     const p2 = rotX(p1) as Point;
     const p2RotX = new Point(0.0, 1.0, 0.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);
@@ -31,7 +31,7 @@ describe('Rotations X', () => {
   test('Inverse rotation around X of -90 degrees maps a point on Z to another point on -Y (clockwise)', () => {
     const ang = -Math.PI / 2;
     const p1 = new Point(0.0, 0.0, 1.0);
-    const rotX = map(Transform.fromRotationX(ang).inverte());
+    const rotX = map(Transform.fromRotationX(ang).invert());
     const p2 = rotX(p1) as Point;
     const p2RotX = new Point(0.0, -1.0, 0.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);
@@ -51,7 +51,7 @@ describe('Rotations Y', () => {
   test('Inverse rotation around X of -90 degrees maps a point on X to another point on -Z (anticlockwise)', () => {
     const ang = -Math.PI / 2;
     const p1 = new Point(1.0, 0.0, 0.0);
-    const rotX = map(Transform.fromRotationY(ang).inverte());
+    const rotX = map(Transform.fromRotationY(ang).invert());
     const p2 = rotX(p1) as Point;
     const p2RotX = new Point(0.0, 0.0, -1.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);
@@ -69,7 +69,7 @@ describe('Rotations Y', () => {
   test('Inverse rotation around Y of 90 degrees maps a point on Z to another point on Z (clockwise)', () => {
     const ang = Math.PI / 2;
     const p1 = new Point(1.0, 0.0, 0.0);
-    const rotX = map(Transform.fromRotationY(ang).inverte());
+    const rotX = map(Transform.fromRotationY(ang).invert());
     const p2 = rotX(p1) as Point;
     const p2RotX = new Point(0.0, 0.0, 1.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);
@@ -89,7 +89,7 @@ describe('Rotations Z', () => {
   test('Inverse rotation around Z of -90 degrees maps a point on X to another point on -Y (anticlockwise)', () => {
     const ang = -Math.PI / 2;
     const p1 = new Point(1.0, 0.0, 0.0);
-    const rotZ = map(Transform.fromRotationZ(ang).inverte());
+    const rotZ = map(Transform.fromRotationZ(ang).invert());
     const p2 = rotZ(p1) as Point;
     const p2RotX = new Point(0.0, -1.0, 0.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);
@@ -107,7 +107,7 @@ describe('Rotations Z', () => {
   test('Inverse rotation around Z of 90 degrees maps a point on X to another point on Y (clockwise)', () => {
     const ang = Math.PI / 2;
     const p1 = new Point(1.0, 0.0, 0.0);
-    const rotZ = map(Transform.fromRotationZ(ang).inverte());
+    const rotZ = map(Transform.fromRotationZ(ang).invert());
     const p2 = rotZ(p1) as Point;
     const p2RotX = new Point(0.0, 1.0, 0.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);

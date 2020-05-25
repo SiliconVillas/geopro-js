@@ -6,7 +6,7 @@ import {
   Row,
   Col,
   VCoords,
-  InvertableGroMatrix,
+  InvertibleGroMatrix,
   AffineGeoMatrix,
 } from './types';
 import { UnitVector } from './unitvector';
@@ -17,7 +17,7 @@ import { clone } from 'ramda';
  * A frame of reference
  * @public
  */
-export class Frame implements GeoMatrix, InvertableGroMatrix {
+export class Frame implements GeoMatrix, InvertibleGroMatrix {
   private _direct: Matrix;
   private _inverse: Matrix;
 
@@ -125,7 +125,7 @@ export class Frame implements GeoMatrix, InvertableGroMatrix {
   /**
    * Inverte the transformation defined for this frame.
    */
-  inverte(): GeoMatrix {
+  invert(): GeoMatrix {
     return Frame.fromMatrices(this._inverse, this._direct);
   }
 

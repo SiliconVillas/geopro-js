@@ -102,7 +102,7 @@ export class Vector implements HomogeneusCoords {
    * @param f - the frame of reference
    * @param c - the vector components
    */
-  static relative = curry((f: Frame, v: Vector): Vector => v.map(f.inverte()));
+  static relative = curry((f: Frame, v: Vector): Vector => v.map(f.invert()));
 
   /**
    * Determine if two vectors are equals (within tollerance)

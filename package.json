@@ -21,19 +21,19 @@
     "qtest": "jest"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.8.1",
-    "@rollup/plugin-commonjs": "^11.1.0",
+    "@microsoft/api-extractor": "^7.8.5",
+    "@rollup/plugin-commonjs": "^12.0.0",
     "@rollup/plugin-json": "^4.0.3",
-    "@types/jest": "^25.2.1",
-    "@types/ramda": "^0.27.4",
+    "@types/jest": "^25.2.3",
+    "@types/ramda": "^0.27.6",
     "husky": "^4.2.5",
-    "jest": "^25.0.0",
+    "jest": "^26.0.1",
     "prettier": "^2.0.5",
-    "rollup": "^2.10.2",
-    "rollup-plugin-terser": "^5.3.0",
+    "rollup": "^2.10.8",
+    "rollup-plugin-terser": "^6.0.1",
     "rollup-plugin-typescript2": "^0.27.1",
-    "ts-jest": "^25.4.0",
-    "typescript": "^3.9.2"
+    "ts-jest": "^26.0.0",
+    "typescript": "^3.9.3"
   },
   "dependencies": {
     "ramda": "^0.27.0"

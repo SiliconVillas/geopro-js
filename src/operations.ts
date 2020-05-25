@@ -1,5 +1,5 @@
-import { curry, reduceRight, init, last } from 'ramda';
-import { HomogeneusCoords, GeoMatrix } from './types';
+import { curry, reduceRight, init, last, head, tail, reduce } from 'ramda';
+import { HomogeneusCoords, GeoMatrix, AffineGeoMatrix } from './types';
 import { Transform } from './transform';
 
 /**
@@ -18,11 +18,22 @@ export const map = curry(
  * @param tlist - a list of transformation to combine
  * @public
  */
-export const compose = (...l: GeoMatrix[]) => {
-  const t = init(l);
-  const h = last(l) || new Transform();
-  return reduceRight(
-    (accTrans: GeoMatrix, trans: GeoMatrix) => trans.composeWith(accTrans),
+// export const compose = (...l: AffineGeoMatrix[]): AffineGeoMatrix => {
+//   const t = init(l);
+//   const h = last(l) || new Transform();
+//   return reduceRight<AffineGeoMatrix, AffineGeoMatrix>(
+//     (accTrans: AffineGeoMatrix, trans: AffineGeoMatrix) =>
+//       trans.composeWith(accTrans) as AffineGeoMatrix,
+//     h
+//   )(t);
+// };
+
+export const compose = (...l: AffineGeoMatrix[]): AffineGeoMatrix => {
+  const t = tail(l);
+  const h = head(l) || new Transform();
+  return reduce<AffineGeoMatrix, AffineGeoMatrix>(
+    (accTrans: AffineGeoMatrix, trans: AffineGeoMatrix) =>
+      accTrans.composeWith(trans) as AffineGeoMatrix,
     h
   )(t);
 };

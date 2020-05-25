@@ -9,13 +9,16 @@ import { clone } from 'ramda';
 export class Project implements GeoMatrix {
   private _direct: Matrix;
   private _fov: number = Math.PI / 3; // 60 degrees
+  private _d = 1;
 
   /**
    * build a basic projection on XY on Z=-1
    * @param fov - Field of view angle (in radians)
    */
-  constructor(fov = Math.PI / 3) {
-    const s = Project.fovScale(fov);
+  constructor(d: number, fov = Math.PI / 3) {
+    this._d = d;
+    this._fov = fov;
+    const s = Project.fovScale(d, fov);
     this._direct = [
       [s, 0.0, 0.0, 0.0], // col 0
       [0.0, s, 0.0, 0.0], // col 1
@@ -41,52 +44,85 @@ export class Project implements GeoMatrix {
     const { directMatrix: dm1 } = this;
     const { directMatrix: dm2 } = t;
     const resM: Matrix = matrixMultiply(dm2, dm1);
-    return Project.fromMatrices(resM, resM) as Project;
+    return Project.fromMatrix(resM, this._d, this._fov) as Project;
   }
 
   private get fovScale() {
-    return Project.fovScale(this._fov);
+    return Project.fovScale(this._d, this._fov);
   }
 
-  static fovScale(fov: number) {
-    return 1 / Math.tan(fov / 2);
+  static fovScale(d: number, fov: number) {
+    return 1 / (d * Math.tan(fov / 2));
   }
 
-  static fromProjectOnXY(viewDist: number, fov: number) {
-    const s = Project.fovScale(fov);
+  static fromOrthographicOnXY(d: number, fov: number) {
+    const s = Project.fovScale(d, fov);
     const direct: Matrix = [
       [s, 0.0, 0.0, 0.0], // col 0
       [0.0, s, 0.0, 0.0], // col 1
-      [0.0, 0.0, 1.0, 1.0], // col 2
-      [0.0, 0.0, 0.0, 0.0], // col 3
+      [0.0, 0.0, 0.0, 0.0], // col 2
+      [0.0, 0.0, d, 1], // col 3
     ];
-    return Project.fromMatrices(direct, direct);
+    return Project.fromMatrix(direct, d, fov);
   }
 
-  static fromProjectOnXZ(viewDist: number, fov: number) {
-    const s = Project.fovScale(fov);
+  static fromOrthographicOnXZ(d: number, fov: number) {
+    const s = Project.fovScale(d, fov);
     const direct: Matrix = [
       [s, 0.0, 0.0, 0.0], // col 0
-      [0.0, 1.0, 0.0, 1.0], // col 1
+      [0.0, 0.0, 0.0, 0.0], // col 1
+      [0.0, 0.0, s, 0.0], // col 2
+      [0.0, d, 0.0, 1], // col 3
+    ];
+    return Project.fromMatrix(direct, d, fov);
+  }
+
+  static fromOrthographicOnYZ(d: number, fov: number) {
+    const s = Project.fovScale(d, fov);
+    const direct: Matrix = [
+      [0.0, 0.0, 0.0, 0.0], // col 0
+      [0.0, s, 0.0, 0.0], // col 1
+      [0.0, 0.0, s, 0.0], // col 2
+      [d, 0.0, 0.0, 1], // col 3
+    ];
+    return Project.fromMatrix(direct, d, fov);
+  }
+
+  static fromPerspectiveOnXY(d: number, fov: number) {
+    const s = Project.fovScale(d, fov);
+    const direct: Matrix = [
+      [s, 0.0, 0.0, 0.0], // col 0
+      [0.0, s, 0.0, 0.0], // col 1
+      [0.0, 0.0, 1, 1 / d], // col 2
+      [0.0, 0.0, 0.0, 0.0], // col 3
+    ];
+    return Project.fromMatrix(direct, d, fov);
+  }
+
+  static fromPerspectiveOnXZ(d: number, fov: number) {
+    const s = Project.fovScale(d, fov);
+    const direct: Matrix = [
+      [s, 0.0, 0.0, 0.0], // col 0
+      [0.0, 1, 0.0, 1 / d], // col 1
       [0.0, 0.0, s, 0.0], // col 2
       [0.0, 0.0, 0.0, 0.0], // col 3
     ];
-    return Project.fromMatrices(direct, direct);
+    return Project.fromMatrix(direct, d, fov);
   }
 
-  static fromProjectOnYZ(viewDist: number, fov: number) {
-    const s = Project.fovScale(fov);
+  static fromPerspectiveOnYZ(d: number, fov: number) {
+    const s = Project.fovScale(d, fov);
     const direct: Matrix = [
-      [1.0, 0.0, 0.0, 1.0], // col 0
+      [1, 0.0, 0.0, 1 / d], // col 0
       [0.0, s, 0.0, 0.0], // col 1
       [0.0, 0.0, s, 0.0], // col 2
       [0.0, 0.0, 0.0, 0.0], // col 3
     ];
-    return Project.fromMatrices(direct, direct);
+    return Project.fromMatrix(direct, d, fov);
   }
 
-  private static fromMatrices(dir: Matrix, _: Matrix) {
-    const t = new Project();
+  private static fromMatrix(dir: Matrix, d: number, fov: number) {
+    const t = new Project(d, fov);
     t._direct = clone(dir);
     return t;
   }

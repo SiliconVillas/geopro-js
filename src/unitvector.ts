@@ -131,7 +131,7 @@ export class UnitVector implements HomogeneusCoords {
    * @param m - transformation matrix
    */
   static relative = curry(
-    (f: Frame, u: UnitVector): UnitVector => u.map(f.inverte())
+    (f: Frame, u: UnitVector): UnitVector => u.map(f.invert())
   );
 
   static equals = (v1: UnitVector, v2: UnitVector): boolean => {

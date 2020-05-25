@@ -105,9 +105,10 @@ describe('Use a frame to compute relative points and vectors', () => {
     const v2 = new Vector(-1.0, 0.0, 0.0);
     const frame = Frame.from2Vectors(o, v1, v2);
     const toGlobal = Point.relative(frame);
+    const toRelative = map(frame);
 
     const p = new Point(9.0, 9.0, 9.0);
-    const p1 = map(frame, p) as Point;
+    const p1 = toRelative(p) as Point;
     const expP1InFrame = new Point(1, -1, 1);
     // p1 coordinates are p relative to the frame
     expect(Point.equals(p1, expP1InFrame)).toBe(true);
@@ -258,7 +259,7 @@ describe('Transform a frame using transformations', () => {
     const frameIn0 = Frame.from2Vectors(origin, v1, v2);
 
     // const frameIn10 = frameIn0.composeWith(translate) as Frame;
-    const frameIn10 = compose(translate, frameIn0) as Frame;
+    const frameIn10 = compose(frameIn0, translate) as Frame;
     const toFrame = map(frameIn10);
     const toGlobal = Point.relative(frameIn10);
 

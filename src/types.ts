@@ -58,17 +58,17 @@ export interface GeoMatrix {
 }
 
 /**
- * An invertable transformation object must implement this interface
+ * An invertible transformation object must implement this interface
  * @public
  */
-export interface InvertableGroMatrix {
+export interface InvertibleGroMatrix {
   readonly inverseMatrix: Matrix;
   inverse(row: Row, col: Col): Number;
-  inverte(): GeoMatrix;
+  invert(): GeoMatrix;
 }
 
 /**
- * Invertable transformation (affine trasnformation only)
+ * Invertible transformation (affine transformation only)
  * @public
  */
-export type AffineGeoMatrix = GeoMatrix & InvertableGroMatrix;
+export type AffineGeoMatrix = GeoMatrix & InvertibleGroMatrix;

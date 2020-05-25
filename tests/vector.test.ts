@@ -23,11 +23,23 @@ describe('Basic Vector', () => {
     expect(Vector.notEquals(v1, v2)).toBe(false);
   });
 
-  test('Build a vector and get its coordinates', () => {
+  test('Build two vectors check it they are different', () => {
     const v1 = new Vector(1.0, 3.4, 5.6);
     const v2 = new Vector(1.001, 3.4000001, 5.59999999);
     expect(Vector.equals(v1, v2)).toBe(false);
     expect(Vector.notEquals(v1, v2)).toBe(true);
+  });
+
+  test('Check if two parallel vectors are parallel', () => {
+    const v1 = new Vector(10, 10, 10);
+    const v2 = new Vector(-100, -100, -100);
+    expect(Vector.parallel(v1, v2)).toBe(true);
+  });
+
+  test('Check if two non parallel vectors are parallel', () => {
+    const v1 = new Vector(10, 10, 10);
+    const v2 = new Vector(-101, -102, -100);
+    expect(Vector.parallel(v1, v2)).toBe(false);
   });
 
   test('Build a vector and get its length', () => {
@@ -65,18 +77,6 @@ describe('Basic Vector', () => {
     expect(vres.x).toBe(0);
     expect(vres.y).toBe(0);
     expect(vres.z).toBe(0);
-  });
-
-  test('Check if two parallel vectors are parallel', () => {
-    const v1 = new Vector(10, 10, 10);
-    const v2 = new Vector(-100, -100, -100);
-    expect(Vector.parallel(v1, v2)).toBe(true);
-  });
-
-  test('Check if two non parallel vectors are parallel', () => {
-    const v1 = new Vector(10, 10, 10);
-    const v2 = new Vector(-101, -102, -100);
-    expect(Vector.parallel(v1, v2)).toBe(false);
   });
 
   test('Check cross product between 2 vectors', () => {

@@ -4,7 +4,7 @@ import {
   Row,
   Col,
   GeoMatrix,
-  InvertableGroMatrix,
+  InvertibleGroMatrix,
   AffineGeoMatrix,
 } from './types';
 import { matrixMultiply } from './math';
@@ -13,7 +13,7 @@ import { matrixMultiply } from './math';
  * A affine 3D transformation
  * @public
  */
-export class Transform implements GeoMatrix, InvertableGroMatrix {
+export class Transform implements GeoMatrix, InvertibleGroMatrix {
   private _direct: Matrix;
   private _inverse: Matrix;
 
@@ -42,7 +42,7 @@ export class Transform implements GeoMatrix, InvertableGroMatrix {
     return this._inverse[col][row];
   }
 
-  inverte(): Transform {
+  invert(): Transform {
     return Transform.fromMatrices(this._inverse, this._direct);
   }
 

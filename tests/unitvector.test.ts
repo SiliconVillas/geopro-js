@@ -19,7 +19,7 @@ describe('Basic UnitVector', () => {
   });
 
   test('Build a UnitVector and get its coordinates', () => {
-    const v = UnitVector.fromVector(new Vector(1.0, 0.0, 0.0));
+    const v = UnitVector.fromVector(new Vector(12345.0, 0.0, 0.0));
     expect(v.coordinates).toEqual([1.0, 0.0, 0.0, 0.0]);
   });
 
