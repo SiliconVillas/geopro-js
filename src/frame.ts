@@ -10,7 +10,7 @@ import {
   AffineGeoMatrix,
 } from './types';
 import { UnitVector } from './unitvector';
-import { invertAffineOrtogonalMatrix, matrixMultiply } from './math';
+import { invertAffineOrthogonalMatrix, matrixMultiply } from './math';
 import { clone } from 'ramda';
 
 /**
@@ -66,12 +66,12 @@ export class Frame implements GeoMatrix, InvertibleGroMatrix {
       k.coordinates,
       o.coordinates,
     ];
-    const direct = invertAffineOrtogonalMatrix(inverse);
+    const direct = invertAffineOrthogonalMatrix(inverse);
     return Frame.fromMatrices(direct, inverse);
   };
 
   /**
-   * Retrive the matrix used to transform from this frame to
+   * Retrieve the matrix used to transform from this frame to
    * the global frame.
    */
   get directMatrix() {
@@ -86,10 +86,20 @@ export class Frame implements GeoMatrix, InvertibleGroMatrix {
     return this._inverse;
   }
 
+  /**
+   * Retrieve an element of the direct transformation matrix
+   * @param row - row of the element to retrieve.
+   * @param col - column of the element to retrieve.
+   */
   direct(row: Row, col: Col): Number {
     return this._direct[col][row];
   }
 
+  /**
+   * Retrieve an element of the inverse transformation matrix
+   * @param row - row of the element to retrieve.
+   * @param col - column of the element to retrieve.
+   */
   inverse(row: Row, col: Col): Number {
     return this._inverse[col][row];
   }
@@ -123,7 +133,7 @@ export class Frame implements GeoMatrix, InvertibleGroMatrix {
   }
 
   /**
-   * Inverte the transformation defined for this frame.
+   * Invert the transformation defined for this frame.
    */
   invert(): GeoMatrix {
     return Frame.fromMatrices(this._inverse, this._direct);
@@ -133,7 +143,7 @@ export class Frame implements GeoMatrix, InvertibleGroMatrix {
    * Builds and returns the composition of t with the
    * transformation represented by this frame.
    * This can be use to transform a frame to another
-   * by using simple trasnformations.
+   * by using simple transformations.
    * That is: resM = t.M · this.M
    * @param t - the transformation to compose with
    */

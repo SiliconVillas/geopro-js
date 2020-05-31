@@ -55,7 +55,7 @@ describe('Frame', () => {
     const v1 = new Vector(0.0, 0.0, 1.0);
     const v2 = new Vector(1.0, 0.0, 0.0);
     const frame = Frame.from2Vectors(o, v1, v2);
-    const p1 = map(frame, p) as Point;
+    const p1 = map(frame, p);
     // p1 coordinates are p relative to the frame
     expect(Point.equals(p1, new Point(1, 1, 1))).toBe(true);
   });
@@ -108,7 +108,7 @@ describe('Use a frame to compute relative points and vectors', () => {
     const toRelative = map(frame);
 
     const p = new Point(9.0, 9.0, 9.0);
-    const p1 = toRelative(p) as Point;
+    const p1 = toRelative(p);
     const expP1InFrame = new Point(1, -1, 1);
     // p1 coordinates are p relative to the frame
     expect(Point.equals(p1, expP1InFrame)).toBe(true);
@@ -203,7 +203,7 @@ describe('Use a frame and use map to move to frame points and vectors', () => {
 
     const pG = new Point(10, 10, 10);
 
-    const pF = toFrame(pG) as Point;
+    const pF = toFrame(pG);
     const expPF = new Point(0, 0, 0);
 
     expect(Point.equals(pF, expPF)).toBe(true);
@@ -268,7 +268,7 @@ describe('Transform a frame using transformations', () => {
     const expPG = new Point(10, 10, 10);
     expect(Point.equals(pG, expPG)).toBe(true);
 
-    const p1F = toFrame(pG) as Point;
+    const p1F = toFrame(pG);
     expect(Point.equals(p1F, pF)).toBe(true);
   });
 });

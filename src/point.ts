@@ -1,4 +1,4 @@
-import { PCoords, HCoords, HomogeneusCoords, GeoMatrix } from './types';
+import { PCoords, HCoords, HomogeneousCoords, GeoMatrix } from './types';
 import { Vector } from './vector';
 import { precision, matrixPointMultiply } from './math';
 import { isNil, reduce, curry } from 'ramda';
@@ -9,7 +9,7 @@ import { UnitVector } from './unitvector';
  * A 3D point
  * @public
  */
-export class Point implements HomogeneusCoords {
+export class Point implements HomogeneousCoords {
   // @internal
   private _coord: PCoords;
 
@@ -101,6 +101,6 @@ export class Point implements HomogeneusCoords {
  * Typeguard to cast coordinates to a Point
  * @param o
  */
-export function isPoint(o: HomogeneusCoords): o is Point {
+export function isPoint(o: HomogeneousCoords): o is Point {
   return !isNil((o as Point).isPoint);
 }

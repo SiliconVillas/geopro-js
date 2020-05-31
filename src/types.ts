@@ -38,7 +38,7 @@ export type Col = 0 | 1 | 2 | 3;
  * A transformable object must implement this interface
  * @public
  */
-export interface HomogeneusCoords {
+export interface HomogeneousCoords {
   coordinates: HCoords;
   readonly x: number;
   readonly y: number;

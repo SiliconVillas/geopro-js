@@ -79,7 +79,7 @@ export const matrixPointMultiply = (t: Matrix, v: HCoords): HCoords => {
   ];
 };
 
-export const invertAffineOrtogonalMatrix = (t: Matrix): Matrix => {
+export const invertAffineOrthogonalMatrix = (t: Matrix): Matrix => {
   const x = -t[3][0];
   const y = -t[3][1];
   const z = -t[3][2];

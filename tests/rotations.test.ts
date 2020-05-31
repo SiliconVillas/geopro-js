@@ -5,7 +5,7 @@ describe('Rotations X', () => {
     const ang = -Math.PI / 2;
     const p1 = new Point(0.0, 0.0, 1.0);
     const rotX = map(Transform.fromRotationX(ang));
-    const p2 = rotX(p1) as Point;
+    const p2 = rotX(p1);
     const p2RotX = new Point(0.0, 1.0, 0.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);
   });
@@ -14,7 +14,7 @@ describe('Rotations X', () => {
     const ang = Math.PI / 2;
     const p1 = new Point(0.0, 0.0, 1.0);
     const rotX = map(Transform.fromRotationX(ang));
-    const p2 = rotX(p1) as Point;
+    const p2 = rotX(p1);
     const p2RotX = new Point(0.0, -1.0, 0.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);
   });
@@ -23,7 +23,7 @@ describe('Rotations X', () => {
     const ang = Math.PI / 2;
     const p1 = new Point(0.0, 0.0, 1.0);
     const rotX = map(Transform.fromRotationX(ang).invert());
-    const p2 = rotX(p1) as Point;
+    const p2 = rotX(p1);
     const p2RotX = new Point(0.0, 1.0, 0.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);
   });
@@ -32,7 +32,7 @@ describe('Rotations X', () => {
     const ang = -Math.PI / 2;
     const p1 = new Point(0.0, 0.0, 1.0);
     const rotX = map(Transform.fromRotationX(ang).invert());
-    const p2 = rotX(p1) as Point;
+    const p2 = rotX(p1);
     const p2RotX = new Point(0.0, -1.0, 0.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);
   });
@@ -43,7 +43,7 @@ describe('Rotations Y', () => {
     const ang = -Math.PI / 2;
     const p1 = new Point(1.0, 0.0, 0.0);
     const rotX = map(Transform.fromRotationY(ang));
-    const p2 = rotX(p1) as Point;
+    const p2 = rotX(p1);
     const p2RotX = new Point(0.0, 0.0, 1.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);
   });
@@ -52,7 +52,7 @@ describe('Rotations Y', () => {
     const ang = -Math.PI / 2;
     const p1 = new Point(1.0, 0.0, 0.0);
     const rotX = map(Transform.fromRotationY(ang).invert());
-    const p2 = rotX(p1) as Point;
+    const p2 = rotX(p1);
     const p2RotX = new Point(0.0, 0.0, -1.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);
   });
@@ -61,7 +61,7 @@ describe('Rotations Y', () => {
     const ang = Math.PI / 2;
     const p1 = new Point(1.0, 0.0, -0.0);
     const rotX = map(Transform.fromRotationY(ang));
-    const p2 = rotX(p1) as Point;
+    const p2 = rotX(p1);
     const p2RotX = new Point(0.0, 0.0, -1.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);
   });
@@ -70,7 +70,7 @@ describe('Rotations Y', () => {
     const ang = Math.PI / 2;
     const p1 = new Point(1.0, 0.0, 0.0);
     const rotX = map(Transform.fromRotationY(ang).invert());
-    const p2 = rotX(p1) as Point;
+    const p2 = rotX(p1);
     const p2RotX = new Point(0.0, 0.0, 1.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);
   });
@@ -81,7 +81,7 @@ describe('Rotations Z', () => {
     const ang = -Math.PI / 2;
     const p1 = new Point(1.0, 0.0, 0.0);
     const rotZ = map(Transform.fromRotationZ(ang));
-    const p2 = rotZ(p1) as Point;
+    const p2 = rotZ(p1);
     const p2RotX = new Point(0.0, 1.0, 0.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);
   });
@@ -90,7 +90,7 @@ describe('Rotations Z', () => {
     const ang = -Math.PI / 2;
     const p1 = new Point(1.0, 0.0, 0.0);
     const rotZ = map(Transform.fromRotationZ(ang).invert());
-    const p2 = rotZ(p1) as Point;
+    const p2 = rotZ(p1);
     const p2RotX = new Point(0.0, -1.0, 0.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);
   });
@@ -99,7 +99,7 @@ describe('Rotations Z', () => {
     const ang = Math.PI / 2;
     const p1 = new Point(1.0, 0.0, 0.0);
     const rotZ = map(Transform.fromRotationZ(ang));
-    const p2 = rotZ(p1) as Point;
+    const p2 = rotZ(p1);
     const p2RotX = new Point(0.0, -1.0, 0.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);
   });
@@ -108,7 +108,7 @@ describe('Rotations Z', () => {
     const ang = Math.PI / 2;
     const p1 = new Point(1.0, 0.0, 0.0);
     const rotZ = map(Transform.fromRotationZ(ang).invert());
-    const p2 = rotZ(p1) as Point;
+    const p2 = rotZ(p1);
     const p2RotX = new Point(0.0, 1.0, 0.0);
     expect(Point.equals(p2, p2RotX)).toBe(true);
   });

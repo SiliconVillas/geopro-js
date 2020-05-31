@@ -1,4 +1,4 @@
-import { VCoords, HomogeneusCoords, GeoMatrix } from './types';
+import { VCoords, HomogeneousCoords, GeoMatrix } from './types';
 import { Vector } from './vector';
 import { precision, matrixVectorMultiply } from './math';
 import { isNil, curry } from 'ramda';
@@ -9,7 +9,7 @@ import { Point } from './point';
  * A 3D unit-vector
  * @public
  */
-export class UnitVector implements HomogeneusCoords {
+export class UnitVector implements HomogeneousCoords {
   private _coord: VCoords;
 
   static fromVector(v: Vector) {
@@ -199,6 +199,6 @@ export class UnitVector implements HomogeneusCoords {
   };
 }
 
-export function isUnitVector(o: HomogeneusCoords): o is UnitVector {
+export function isUnitVector(o: HomogeneousCoords): o is UnitVector {
   return !isNil((o as UnitVector).isUnitVector);
 }
