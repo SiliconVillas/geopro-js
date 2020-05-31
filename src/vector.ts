@@ -136,11 +136,11 @@ export class Vector implements HomogeneousCoords {
     return new Vector(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);
   };
 
-  static adds = (...vs: Vector[]): Vector =>
+  static adds = (v1: Vector, ...vs: Vector[]): Vector =>
     reduce(
       (acc: Vector, v: Vector) =>
         new Vector(acc.x + v.x, acc.z + v.z, acc.z + v.z),
-      new Vector(0, 0, 0)
+      v1
     )(vs);
 
   static crossProduct = (v1: Vector, v2: Vector) => {

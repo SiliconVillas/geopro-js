@@ -1,4 +1,4 @@
-import { Vector, Point, map, Transform } from '../src/index';
+import { Vector, Point, map, Transform, addToVector } from '../src/index';
 import { isVector } from '../src/vector';
 
 describe('Basic Vector', () => {
@@ -74,6 +74,18 @@ describe('Basic Vector', () => {
     const v3 = new Vector(0, -10, 0);
     const v4 = new Vector(0, 0, -10);
     const vres = Vector.adds(v1, v2, v3, v4);
+    expect(vres.x).toBe(0);
+    expect(vres.y).toBe(0);
+    expect(vres.z).toBe(0);
+  });
+
+  test('Build a vector adding function and use to add 4 vectors', () => {
+    const v1 = new Vector(10, 10, 10);
+    const v2 = new Vector(-10, 0, 0);
+    const v3 = new Vector(0, -10, 0);
+    const v4 = new Vector(0, 0, -10);
+    const addToV1 = addToVector(v1);
+    const vres = addToVector(v1, v2, v3, v4);
     expect(vres.x).toBe(0);
     expect(vres.y).toBe(0);
     expect(vres.z).toBe(0);

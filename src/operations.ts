@@ -1,6 +1,6 @@
-import { curry, reduceRight, init, last, head, tail, reduce, T } from 'ramda';
+import { curry, tail, head, reduce } from 'ramda';
 import { HomogeneousCoords, GeoMatrix, AffineGeoMatrix } from './types';
-import { Transform } from './transform';
+import { Transform, Point, Vector } from '.';
 
 export type Map = {
   <T extends HomogeneousCoords>(t: GeoMatrix, o: T): T;
@@ -32,3 +32,27 @@ export const compose = (...l: AffineGeoMatrix[]): AffineGeoMatrix => {
     h
   )(t);
 };
+
+export type AddToPoint = {
+  (p: Point, v: Vector, ...vs: Vector[]): Point;
+  (p: Point): (v: Vector, ...vs: Vector[]) => Point;
+};
+
+/**
+ * Add vectors to a point
+ */
+export const addToPoint: AddToPoint = (curry(
+  (p: Point, v: Vector, ...vs: Vector[]) => Point.adds([v, ...vs], p)
+) as unknown) as AddToPoint;
+
+export type AddToVector = {
+  (v1: Vector, v: Vector, ...vs: Vector[]): Vector;
+  (v1: Vector): (v: Vector, ...vs: Vector[]) => Vector;
+};
+
+/**
+ * Add vectors to a vector
+ */
+export const addToVector: AddToVector = (curry(
+  (v1: Vector, v: Vector, ...vs: Vector[]) => Vector.adds(v1, v, ...vs)
+) as unknown) as AddToVector;

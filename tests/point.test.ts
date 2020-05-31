@@ -1,4 +1,11 @@
-import { Transform, map, Point, Vector, UnitVector } from '../src/index';
+import {
+  Transform,
+  map,
+  Point,
+  Vector,
+  UnitVector,
+  addToPoint,
+} from '../src/index';
 import { isPoint } from '../src/point';
 
 describe('Basic Points and Transformations', () => {
@@ -37,6 +44,21 @@ describe('Basic Points and Transformations', () => {
     expect(p2.x).toEqual(10 + 3);
     expect(p2.y).toEqual(10 + 6);
     expect(p2.z).toEqual(10 + 2);
+  });
+
+  test('Build add with vector function', () => {
+    const p1 = new Point(10, 10, 10);
+    const v1 = new Vector(3, 6, 2);
+    const v2 = new Vector(-3, -6, -2);
+
+    const addToP1 = addToPoint(p1);
+
+    const p2 = addToP1(v1);
+    const p3 = addToP1(v1, v2);
+    expect(p2.x).toEqual(10 + 3);
+    expect(p2.y).toEqual(10 + 6);
+    expect(p2.z).toEqual(10 + 2);
+    expect(Point.equals(p3, p1)).toBe(true);
   });
 
   test('Identity transformation keeps point positions', () => {
