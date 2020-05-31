@@ -1,6 +1,6 @@
 {
   "name": "geopro-js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": {
     "name": "Michele Ursino"
   },
@@ -18,7 +18,8 @@
     "postbuild": "api-extractor run --local",
     "build": "rimraf lib && rollup -c",
     "test": "jest test --coverage --verbose",
-    "qtest": "jest"
+    "qtest": "jest",
+    "prepublish": "yarn build && yarn test"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.8.5",
