@@ -3,5 +3,10 @@
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "cSpell.words": [
     "unitvector"
-  ]
+  ],
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#44260B",
+    "titleBar.activeBackground": "#5F3610",
+    "titleBar.activeForeground": "#FDF9F5"
+  }
 }

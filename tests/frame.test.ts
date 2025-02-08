@@ -71,7 +71,7 @@ describe('Use a frame to compute relative points and vectors', () => {
     const p = new Point(1.0, 1.0, 1.0); // Relative to frame
 
     // compute the point translated by the origin
-    const p1 = pipe(
+    const p1 = pipe<[Point], Vector, Vector, Point>(
       Point.add(frame.i.multiplyBy(p.x)),
       Point.add(frame.j.multiplyBy(p.y)),
       Point.add(frame.k.multiplyBy(p.z))
