@@ -83,3 +83,13 @@ A reference frame (`Frame`) represents a orthogonal coordinate system in 3D:
 ```
 
 ## Development
+
+This library is written in TypeScript and can be compiled to JavaScript using the TypeScript compiler.
+
+The package manager is `yarn` and the build system is `rollup` to bundle the file into the `dist` folder.
+
+```
+yarn install
+yarn run build
+yarn run test
+```
